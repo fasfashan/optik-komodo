@@ -9,9 +9,9 @@
     <div class="container mt-5">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="<?php echo base_url().'welcome'?>">Home</a></li>
           <li class="breadcrumb-item">
-            <a href="input-stok.html">Input stok</a>
+            <a href="<?php echo base_url().'admin/stock'?>">Input stok</a>
           </li>
           <li class="breadcrumb-item active" aria-current="page">Lensa</li>
         </ol>

@@ -4,14 +4,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class M_stock extends CI_Model {
 
 
-    public function get_all_frame() {
-        $this->datatables->select('id,nama,kode_frame,state,harga');
-        $this->datatables->from('stock_frame');
-        $this->datatables->add_column('view', '<button type="button" onclick="edit_frame(`$1`)" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</button>  <button onclick="hapus_barang(`$1`)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus</button>','id,nama,kode_frame,state,harga');
-        return $this->datatables->generate();
-    }
+   public function get_all_frame() {
+   $this->datatables->select('c.id, a.nota, c.nama as nama_frame, c.kode_frame, c.state, d.jenis_lensa, a.tanggal, c.harga, c.tanggal_dibuat');
+	$this->datatables->from('stock_frame c');
+	$this->datatables->join('transaksi a', 'a.frame = c.id', 'left');
+	$this->datatables->join('stock_lensa d', 'a.lensa = d.id', 'left');
+	$this->datatables->add_column('view', '<button type="button" onclick="edit_frame(`$1`)" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</button>  <button onclick="hapus_barang(`$1`)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus</button>', 'c.id');
+	return $this->datatables->generate();
+}
+
+
 
     public function get_all_lensa() {
+        
         $this->datatables->select('id,jenis_lensa,ukuran_sph,ukuran_cyl,stok');
         $this->datatables->from('stock_lensa');
         $this->datatables->add_column('view', '<button type="button" onclick="edit_lensa(`$1`)" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</button>  <button onclick="hapus_lensa(`$1`)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus</button>','id,jenis_lensa,ukuran_sph,ukuran_cyl,stok');

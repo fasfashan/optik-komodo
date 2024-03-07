@@ -8,7 +8,7 @@
     <div class="container mt-5">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="<?php echo base_url().'welcome'?>">Home</a></li>
           <li class="breadcrumb-item active" aria-current="page">
             Pendaftaran
           </li>
@@ -254,61 +254,45 @@
 
 
         function save() {
-            // $('#btnSave').text('saving...'); //change button text
-            // $('#btnSave').attr('disabled',true); //set button disable 
-            var url, method;
-            var save_label = $('#save_label').val();
-            if(save_label == 'add') {
-                url = "<?=base_url('admin/pendaftaran/add')?>";
-                method = 'disimpan';
-            } else {
-                url = "<?=base_url('admin/pendaftaran/update')?>";
-                method = 'diupdate';
-            }
+    var url, method;
+    var save_label = $('#save_label').val();
+    if (save_label == 'add') {
+        url = "<?=base_url('admin/pendaftaran/add')?>";
+        method = 'disimpan';
+    } else {
+        url = "<?=base_url('admin/pendaftaran/update')?>";
+        method = 'diupdate';
+    }
 
-            // ajax adding data to database
-            Swal.fire({
-            title: "Data pendaftaran telah tersminpan.",
-                      showDenyButton: true,
-                      showCancelButton: true,
-                      confirmButtonText: "Lanjutkan Transaksi",
-                    }).then((result) => {
-                      if(result.value) {
-            $.ajax({
-                url : url,
-                type: "POST",
-                data: $('#form').serialize(),
-                dataType: "json",
-                success: function(data)
-                {
-                    // console.log(data);
-                    if(data.status) //if success close modal and reload ajax table
-                    {
-                        // reload_ajax();
-                        window.location.href="<?php echo base_url().'admin/transaksi'?>";
-                    }
-                    else
-                    {
-                        $.each(data.errors, function(key, value){
-                            $('[name="'+key+'"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
-                            $('[name="'+key+'"]').next().text(value); //select span help-block class set text error string
-                            if(value == ""){
-                                $('[name="'+key+'"]').removeClass('is-invalid');
-                                $('[name="'+key+'"]').addClass('is-valid');
-                            }
-                        });
-                    }
-                    // $('#btnSave').text('save'); //change button text
-                    // $('#btnSave').attr('disabled',false); //set button enable 
-                },
-                error: function (jqXHR, textStatus, errorThrown)
-                {
-                    alert('Error adding / update data');
+    // ajax adding data to database
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: $('#form').serialize(),
+        dataType: "json",
+        success: function(data) {
+          console.log(data.id)
+          Swal.fire({
+                title: "Data pendaftaran telah tersimpan.",
+                html: "ID: " + data.id + "<br/>" +
+                      "Nama: " + $('#nama').val() + "<br/>" +
+                      "No. BPJS: " + $('#bpjs').val() + "<br/>" +
+                      "Alamat: " + $('#alamat').val() + "<br/>" +
+                      "No. Telp: " + $('#telp').val(),
+                showDenyButton: true,
+                confirmButtonText: "Selesai"
+            }).then((result) => {
+                if (result.value) {
+                    window.location.href = "<?php echo base_url().'admin/pendaftaran'?>";
                 }
             });
-           }
-          });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            alert('Error adding / update data');
         }
+    });
+}
+
 
         
         function reload_ajax(){

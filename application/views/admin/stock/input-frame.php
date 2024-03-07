@@ -9,9 +9,9 @@
     <div class="container mt-5">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="<?php echo base_url().'welcome'?>">Home</a></li>
           <li class="breadcrumb-item">
-            <a href="input-stok.html">Input stok</a>
+            <a href="<?php echo base_url().'admin/stock'?>">Input stok</a>
           </li>
           <li class="breadcrumb-item active" aria-current="page">Frame</li>
         </ol>
@@ -82,14 +82,14 @@
                       <option>Umum</option>
                     </select>
                   </div>
-                  <div class="mb-3 d-none">
+                  <div class="mb-3 ">
                     <label for="harga" class="form-label">Harga</label>
                     <input
                         name="harga"
                       type="number"
                       class="form-control"
                       id="harga"
-                      placeholder="Masukan kode Frame"
+                      placeholder="Masukan harga"
                     />
                   </div>
                 </div>
@@ -160,6 +160,8 @@
                 <th scope="col">Kode Frame</th>
                 <th scope="col">Kelas BPJS</th>
                 <th scope="col">Harga</th>
+                <th scope="col">Tanggal Transaksi</th>
+                <th scope="col">Tanggal Dibuat</th>
                 <th scope="col">Action</th>
               </tr>
             </thead>
@@ -217,22 +219,22 @@
       });
     </script>
     <script>
-      document
-        .getElementById("inputState")
-        .addEventListener("change", function () {
-          var selectedOption = this.value;
-          if (selectedOption === "Umum") {
-            document
-              .getElementById("harga")
-              .closest(".mb-3")
-              .classList.remove("d-none");
-          } else {
-            document
-              .getElementById("harga")
-              .closest(".mb-3")
-              .classList.add("d-none");
-          }
-        });
+      // document
+      //   .getElementById("inputState")
+      //   .addEventListener("change", function () {
+      //     var selectedOption = this.value;
+      //     if (selectedOption === "Umum") {
+      //       document
+      //         .getElementById("harga")
+      //         .closest(".mb-3")
+      //         .classList.remove("d-none");
+      //     } else {
+      //       document
+      //         .getElementById("harga")
+      //         .closest(".mb-3")
+      //         .classList.add("d-none");
+      //     }
+      //   });?
         
         var save_label;
         var table;
@@ -281,10 +283,18 @@
                         "orderable": false,
                         "searchable": false,
                     },
-                    {"data": "nama","autowidth": true},				
+                    {"data": "nama_frame","autowidth": true},				
                     {"data": "kode_frame","autowidth": true},
                     {"data": "state","autowidth": true},
                     {"data": "harga",render: $.fn.dataTable.render.number( ',', '.', 0, ),"autowidth": true},            
+                    {
+                      "data": "tanggal",
+                      "autowidth": true,
+                      "render": function(data, type, row, meta) {
+                        return data ? data : '-';
+                      }
+                    },
+                    {"data": "tanggal_dibuat","autowidth": true},
                     {
                         "data": "view",
                         "orderable": false,
@@ -317,8 +327,7 @@
         }
 
         function save() {
-            $('#btnSave').text('saving...'); //change button text
-            $('#btnSave').attr('disabled',true); //set button disable 
+             //set button disable 
             var url, method;
 
             if(save_label == 'add') {

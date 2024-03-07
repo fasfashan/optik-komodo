@@ -9,9 +9,9 @@
     <div class="container mt-5">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="<?php echo base_url().'welcome'?>">Home</a></li>
           <li class="breadcrumb-item">
-            <a href="pengeluaran.html">Pengeluaran</a>
+            <a href="<?php echo base_url().'admin/pengeluaran'?>">Pengeluaran</a>
           </li>
 
           <li class="breadcrumb-item active" aria-current="page">
@@ -63,7 +63,7 @@
                       type="email"
                       class="form-control"
                       id="namaBarang"
-                      placeholder="Masukan nama Frame"
+                      placeholder="Masukan nama barang"
                       name="nama_barang"
                     />
                   </div>
@@ -74,7 +74,7 @@
                       class="form-control"
                       id="harga"
                       name="harga"
-                      placeholder="Masukan kode Frame"
+                      placeholder="Masukan nama harga"
                     />
                   </div>
                   <div class="mb-3">

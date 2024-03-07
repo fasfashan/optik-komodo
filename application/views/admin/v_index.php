@@ -46,10 +46,11 @@
           <img class="mb-3" src="<?php echo base_url().'assets/img/laporan.svg'?>" alt="" />
           <p class="text-white">Laporan</p>
         </a>
-        <a href="backup-database.html" class="col back-up">
-          <img class="mb-3" src="<?php echo base_url().'assets/img/database 1.svg'?>" alt="" />
-          <p class="text-white">Back up database</p>
-        </a>
+        <a href="<?php echo base_url().'admin/Backup/backup_database'?>" class="col back-up">
+    <img class="mb-3" src="<?php echo base_url().'assets/img/database 1.svg'?>" alt="" />
+    <p class="text-white">Back up database</p>
+</a>
+
       </div>
     </div>
     <script

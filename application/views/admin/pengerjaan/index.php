@@ -9,7 +9,7 @@
     <div class="container mt-5">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="<?php echo base_url().'welcome'?>">Home</a></li>
 
           <li class="breadcrumb-item active" aria-current="page">
             Stasus Pengerjaan Kacamata
@@ -19,36 +19,7 @@
     </div>
     <div class="container"></div>
     <div class="container mt-5">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="input-group mb-3">
-          <input
-              type="text"
-              class="form-control"
-              placeholder="Masukan Nota"
-              aria-label="Masukan Nota"
-              aria-describedby="button-addon2"
-              id="noNota"
-            />
-            <button class="btn btn-success" type="button" id="button-addon2" onclick="pengerjaan()">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M8 4C5.79086 4 4 5.79086 4 8C4 10.2091 5.79086 12 8 12C10.2091 12 12 10.2091 12 8C12 5.79086 10.2091 4 8 4ZM2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8C14 9.29583 13.5892 10.4957 12.8907 11.4765L17.7071 16.2929C18.0976 16.6834 18.0976 17.3166 17.7071 17.7071C17.3166 18.0976 16.6834 18.0976 16.2929 17.7071L11.4765 12.8907C10.4957 13.5892 9.29583 14 8 14C4.68629 14 2 11.3137 2 8Z"
-                  fill="white"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div>
+      
       <div class="row">
         <div class="col-12">
           <table id="pengerjaan" class="table table-striped">
@@ -172,7 +143,15 @@
                 },
                 {"data": "nama_pengguna","autowidth": true},	
                 {"data": "nota","autowidth": true},	
-                {"data": "nama_frame","autowidth": true},      
+               {
+    "data": "nama_frame",
+    "render": function(data, type, row) {
+        var kode_frame = row.kode_frame;
+        var state = row.state;
+        return data + " (" + kode_frame + "/" + state + ")";
+    },
+    "autowidth": true
+},     
                 {"data": 
                   "jenis_lensa",
                   "autowidth": true

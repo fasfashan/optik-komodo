@@ -7,7 +7,26 @@ class m_pendaftaran extends CI_Model {
     public function get_all_pendaftaran() {
         $this->datatables->select('id,nama,no_bpjs,alamat,no_telp');
         $this->datatables->from('pendaftaran');
-        $this->datatables->add_column('view', '<button type="button" onclick="edit_pendaftaran(`$1`)" class="btn btn-primary btn-sm"><i class="fa fa-edit"></i> Edit</button>  <button onclick="hapus_pendaftaran(`$1`)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus</button>','id,nama,no_bpjs,alamat,no_telp');
+        $this->datatables->add_column('view', 
+        '
+        <!-- Example single danger button -->
+<div class="btn-group">
+  <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    Action
+  </button>
+  <ul class="dropdown-menu">
+    <li> <button type="button" onclick="edit_pendaftaran(`$1`)" class="dropdown-item">
+        <i class="fa fa-edit"></i> Edit
+        </button></li>
+    <li><button onclick="hapus_pendaftaran(`$1`)" type="button" class="dropdown-item">
+        <i class="fa fa-trash"></i> Hapus
+        </button></li>
+    <li><a href="' . base_url() . 'admin/transaksi" class="dropdown-item" href="#">Transaksi</a></li>
+  </ul>
+</div>
+        
+        
+', 'id,nama,no_bpjs,alamat,no_telp');
         return $this->datatables->generate();
     }
 

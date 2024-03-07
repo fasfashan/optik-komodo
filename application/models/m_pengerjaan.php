@@ -20,12 +20,13 @@ class m_pengerjaan extends CI_Model {
 	}
 	
 	public function get_data_pengerjaan() {
-		$this->datatables->select('a.id as id,a.nota,c.nama as nama_frame,d.jenis_lensa,a.status_pengerjaan, b.nama as nama_pengguna,a.tanggal_pengerjaan as tanggal_pengerjaan');
+		$this->datatables->select('a.id as id,a.nota,c.nama as nama_frame,c.kode_frame,c.state,d.jenis_lensa,a.status_pengerjaan, b.nama as nama_pengguna,a.tanggal_pengerjaan as tanggal_pengerjaan');
+
         $this->datatables->from('transaksi a');
 		$this->datatables->join('pendaftaran b','a.pengguna_id = b.id');
 		$this->datatables->join('stock_frame c','a.frame = c.id');
 		$this->datatables->join('stock_lensa d','a.lensa = d.id');
-        $this->datatables->add_column('view', '<button type="button" onclick="edit(`$1`)" type="button" class="btn btn-warning btn-sm"><i class="fa fa-trash"></i> Selesai</button>','id,a.nota,a.frame,a.lensa,a.status_pengerjaan,b.nama as nama_pengguna,a.tanggal_pengerjaan as tanggal_pengerjaan');
+        $this->datatables->add_column('view', '<button type="button" onclick="edit(`$1`)" type="button" class="btn btn-outline-secondary btn-sm"><i class="fa fa-trash"></i> Edit status</button>', 'id,a.nota,a.frame,a.lensa,c.nama as nama_frame,c.kode_frame,c.state,d.jenis_lensa,a.status_pengerjaan,b.nama as nama_pengguna,a.tanggal_pengerjaan as tanggal_pengerjaan');
         return $this->datatables->generate();
     }
 

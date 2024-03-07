@@ -49,16 +49,19 @@ class Laporan_transaksi extends CI_Controller {
 	}
     public function database_pdf($id)
 	{
+		
 		// $bln = $this->input->post('bln');
 		$x['pasien'] = $this->m_laporan_transaksi->get_data_pendaftaran_pdf($id)->row();
 		$x['transaksi'] = $this->m_laporan_transaksi->get_data_transaksi_pdf($id)->result();
+		  $pdf_filename = "Laporan Rekam Medis - " . $x['pasien']->nama; // Mengambil nama pasien
 		$this->load->view('admin/laporan-transaksi/database_pdf',$x);
 		$html = $this->output->get_output();
 		$this->load->library('pdf');
 		$this->dompdf->loadHTML($html);
+		$this->dompdf->set_option('isRemoteEnabled', TRUE);
 		$this->dompdf->setPaper('A4','landscape');
 		$this->dompdf->render();
-		$this->dompdf->stream("lap_so.pdf",array("Attachment"=>0));
+		$this->dompdf->stream($pdf_filename . ".pdf", array("Attachment" => 0));
     }
 
 	public function harian_pdf()
@@ -67,14 +70,17 @@ class Laporan_transaksi extends CI_Controller {
 		$end_date = date("Y-m-d");
 		// echo $now;
 		// return;
+		$this->dompdf->set_option('isRemoteEnabled', TRUE);
 		$x['transaksi'] = $this->m_laporan_transaksi->get_data_transaksi_harian_pdf($start_date,$end_date)->result();
+		$pdf_filename = "Laporan Harian - " . $start_date;
+
 		$this->load->view('admin/laporan-transaksi/harian_pdf',$x);
 		$html = $this->output->get_output();
 		$this->load->library('pdf');
 		$this->dompdf->loadHTML($html);
-		$this->dompdf->setPaper('A4','landscape');
+		$this->dompdf->setPaper('F4','landscape');
 		$this->dompdf->render();
-		$this->dompdf->stream("lap_so.pdf",array("Attachment"=>0));
+		$this->dompdf->stream($pdf_filename . ".pdf", array("Attachment" => 0));
     }
 
 	function get_data_database(){ //data data produk by JSON object

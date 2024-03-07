@@ -9,88 +9,12 @@
     <div class="container mt-5">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="<?php echo base_url().'welcome'?>">Home</a></li>
           <li class="breadcrumb-item active" aria-current="page">Transaksi</li>
         </ol>
       </nav>
     </div>
-    <div class="container rounded box-card mt-2">
-      <div class="row align-items-center justify-content-between">
-        <div class="col-4">
-          <img class="mb-3" height="140" src="img/logo-black.png" alt="" />
-          <img height="40" src="img/BPJS_Kesehatan_logo.svg" alt="" />
-        </div>
-        <div class="col-6">
-          <div class="row justify-content-end mb-3">
-            <div class="col-7 d-flex gap-3">
-              <div class="form-check">
-                <input
-                  checked
-                  class="form-check-input"
-                  type="radio"
-                  name="paket"
-                  value="bpjs"
-                  id="flexRadioDefault1"
-                />
-                <label class="form-check-label" for="flexRadioDefault1">
-                  PAKET BPJS
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="paket"
-                  id="flexRadioDefault2"
-                  value="non_bpjs"
-                />
-                <label class="form-check-label" for="flexRadioDefault2">
-                  NON PAKET BPJS
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="paket"
-                  value="umum"
-                  id="flexRadioDefault2"
-                />
-                <label class="form-check-label" for="flexRadioDefault2">
-                  UMUM
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="row justify-content-end">
-            <div class="col-5">
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="nota"
-                  ><svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="20"
-                    height="20"
-                    viewBox="0 0 20 20"
-                    fill="none"
-                  >
-                    <path
-                      fill-rule="evenodd"
-                      clip-rule="evenodd"
-                      d="M6 2C5.44772 2 5 2.44772 5 3V4H4C2.89543 4 2 4.89543 2 6V16C2 17.1046 2.89543 18 4 18H16C17.1046 18 18 17.1046 18 16V6C18 4.89543 17.1046 4 16 4H15V3C15 2.44772 14.5523 2 14 2C13.4477 2 13 2.44772 13 3V4H7V3C7 2.44772 6.55228 2 6 2ZM6 7C5.44772 7 5 7.44772 5 8C5 8.55228 5.44772 9 6 9H14C14.5523 9 15 8.55228 15 8C15 7.44772 14.5523 7 14 7H6Z"
-                      fill="black"
-                    /></svg></span>
-                <input
-                  value="2024-01-30"
-                  type="date"
-                  class="form-control"
-                  disabled
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+   
     <div class="container position-relative mt-5">
       <div class="row">
         <div class="col-6">
@@ -310,10 +234,20 @@
                   <div class="input-group mb-3">
                   <span class="input-group-text">Frame</span>
                     <div class="form-floating">
-                      <select class="form-select form-frame" name="frame" id="selectFrame"  style="width: 100%">
-                      <?php foreach($frame->result_array() as $value){ ?>
-                        <option value="<?php echo $value['id'] ?>"><?php echo $value['nama'] ?> (<?php echo $value['kode_frame'] ?>/<?php echo $value['state'] ?>)</option>
-                      <?php } ?>
+                      <select class="form-select" name="frame" id="selectFrame"  style="width: 100%">
+                      <?php foreach ($frame->result_array() as $value) {
+                    // Lakukan query untuk memeriksa apakah frame telah digunakan dalam transaksi sebelumnya
+                        $query = $this->db->query("SELECT COUNT(*) as total FROM transaksi WHERE frame = " . $value['id']);
+                        $result = $query->row();
+
+                        // Jika total transaksi untuk frame tersebut adalah 0, maka tampilkan sebagai opsi
+                        if ($result->total == 0) {
+                    ?>
+                            <option value="<?php echo $value['id'] ?>"><?php echo $value['nama'] ?> (<?php echo $value['kode_frame'] ?>/<?php echo $value['state'] ?>)</option>
+                    <?php
+                        }
+                    } ?>
+
                       </select>
                     </div>
                   </div>
@@ -372,13 +306,15 @@
                     aria-label="Floating label select example"
                     aria-placeholder="test"
                     name="pembayaran"
+                    onchange="checkSelection()"
                   >
-                    <option value="" selected>-</option>
-
-                    <option value="qris">Qris</option>
-                    <option value="edc">EDC</option>
-                    <option value="transfer">Transfer</option>
-                    <option value="cash">Cash</option>
+                    <option disabled selected>-</option>
+                    <option value="BELUM UANG MUKA" >BELUM UANG MUKA</option>
+                    <option value="BPJS" >BPJS</option>
+                    <option value="QRIS">QRIS</option>
+                    <option value="EDC">EDC</option>
+                    <option value="TRANSFER">TRANSFER</option>
+                    <option value="CASH">CASH</option>
                   </select>
                   <label for="floatingSelect">Pembayaran melalui</label>
                 </div>
@@ -401,6 +337,7 @@
                     class="btn btn-success"
                     id="liveAlertBtn"
                     onclick="selesai()"
+                    disabled
                   >
                     Selesai
                   </button>
@@ -410,6 +347,9 @@
           </div>
         </div>
       </div>
+      <div class="alert alert-danger d-none" role="alert" id="error-message">
+  Error fetching data from server.
+</div>
     </div>
 
     <script
@@ -431,6 +371,20 @@ $(document).ready(function() {
 $(document).ready(function() {
     $('#selectLensa').select2({ width: 'resolve' }).maximizeSelect2Height();
 });
+</script>
+<script>
+  function checkSelection() {
+    var selectElement = document.getElementById("pembayaran");
+    var buttonElement = document.getElementById("liveAlertBtn");
+
+    // Jika tidak ada opsi yang dipilih
+    if (selectElement.value === "-") {
+        buttonElement.disabled = true; // Tombol dinonaktifkan
+    } else {
+        buttonElement.disabled = false; // Tombol diaktifkan
+    }
+}
+
 </script>
     <!-- <script>
       document
@@ -459,6 +413,8 @@ $(document).ready(function() {
       }
 
     </script> -->
-
+<script>
+  
+</script>
   </body>
 </html>

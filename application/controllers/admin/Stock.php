@@ -48,9 +48,9 @@ class Stock extends CI_Controller {
         {					
             $errors = array(				
                 'nama' 	        => form_error('nama'),
-                'kode_frama'    => form_error('kode_frame'),
+                'kode_frame'    => form_error('kode_frame'),
 				'state'         => form_error('state'),
-                'harga' 		=> form_error('harga'),
+				'tanggal_dibuat' => date('Y-m-d')
 			);
             $data = array(
                 'status' 		=> FALSE,
@@ -62,7 +62,7 @@ class Stock extends CI_Controller {
 					'nama'				=> $this->input->post('nama'),
 					'kode_frame' 		=> $this->input->post('kode_frame'),
 					'state'				=> $this->input->post('state'),
-					'harga' 			=> str_replace(',', '', $this->input->post('harga')),
+					
 				);			
 			$this->db->insert('stock_frame', $insert);
             $data['status'] = TRUE;
@@ -87,7 +87,7 @@ class Stock extends CI_Controller {
         if ($this->form_validation->run() == FALSE){
 			$errors = array(
                 'nama' 	        => form_error('nama'),
-                'kode_frama'    => form_error('kode_frame'),
+                'kode_frame'    => form_error('kode_frame'),
 				'state'         => form_error('state'),
             );
             $data = array(
@@ -100,7 +100,7 @@ class Stock extends CI_Controller {
                 'nama'				=> $this->input->post('nama'),
                 'kode_frame' 		=> $this->input->post('kode_frame'),
                 'state'				=> $this->input->post('state'),
-                'harga' 			=> str_replace(',', '', $this->input->post('harga')),
+
 				);
 			$this->db->where('id', $this->input->post('id'));
 			$this->db->update('stock_frame', $update);

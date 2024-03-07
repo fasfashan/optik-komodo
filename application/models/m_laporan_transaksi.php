@@ -27,6 +27,8 @@ class M_laporan_transaksi extends CI_Model{
 						b.alamat,
 						b.no_telp,
 						c.nama as nama_frame,
+						c.kode_frame,
+						c.state,
 						d.jenis_lensa,
 						a.keterangan,
 						a.status_r,
