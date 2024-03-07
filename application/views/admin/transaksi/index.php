@@ -20,7 +20,15 @@
         <div class="col-6">
           <div class="box-card">
             <div class="input-group mb-3">
+              <?php
+// Mulai sesi
+session_start();
+
+$transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
+
+?>
               <input
+               value="<?php echo $transaksi_id; ?>" 
                 type="text"
                 class="form-control"
                 placeholder="Masukan ID"

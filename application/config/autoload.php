@@ -116,3 +116,6 @@ $autoload['model'] = array();
 /* Location: ./application/config/autoload.php */
 
 $autoload['time_zone'] = date_default_timezone_set("Asia/Jakarta");
+
+$config['sess_driver'] = 'files'; // atau pilihan lainnya seperti 'database', 'redis', dll.
+$config['sess_save_path'] = NULL; // sesuaikan dengan lokasi penyimpanan session Anda jika menggunakan driver 'files'

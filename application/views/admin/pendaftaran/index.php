@@ -274,16 +274,18 @@
           console.log(data.id)
           Swal.fire({
                 title: "Data pendaftaran telah tersimpan.",
-                html: "ID: " + data.id + "<br/>" +
-                      "Nama: " + $('#nama').val() + "<br/>" +
-                      "No. BPJS: " + $('#bpjs').val() + "<br/>" +
-                      "Alamat: " + $('#alamat').val() + "<br/>" +
-                      "No. Telp: " + $('#telp').val(),
+                // html: "ID: " + data.id + "<br/>" +
+                //       "Nama: " + $('#nama').val() + "<br/>" +
+                //       "No. BPJS: " + $('#bpjs').val() + "<br/>" +
+                //       "Alamat: " + $('#alamat').val() + "<br/>" +
+                //       "No. Telp: " + $('#telp').val(),
                 showDenyButton: true,
-                confirmButtonText: "Selesai"
+                confirmButtonText: "Lanjut ke Transaksi",
+                  showCancelButton: true,
+                
             }).then((result) => {
                 if (result.value) {
-                    window.location.href = "<?php echo base_url().'admin/pendaftaran'?>";
+                    window.location.href = "<?php echo base_url().'admin/transaksi?id='?>" + data.id;
                 }
             });
         },

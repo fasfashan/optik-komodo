@@ -21,7 +21,7 @@ class m_pendaftaran extends CI_Model {
     <li><button onclick="hapus_pendaftaran(`$1`)" type="button" class="dropdown-item">
         <i class="fa fa-trash"></i> Hapus
         </button></li>
-    <li><a href="' . base_url() . 'admin/transaksi" class="dropdown-item" href="#">Transaksi</a></li>
+    <li><a href="' . base_url() . 'admin/transaksi?id=$1" class="dropdown-item" href="#">Transaksi</a></li>
   </ul>
 </div>
         
