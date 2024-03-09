@@ -36,7 +36,7 @@ header("Expires: 0");
             <th rowspan="2">Frame</th>
             <th rowspan="2">Lensa</th>
             <th rowspan="2">Keterangan</th>
-            <th colspan="5">Ukuran</th>    
+            <th colspan="5">Status Refraksi</th>    
             <th rowspan="2">jumlah</th>
             <th rowspan="2">BPJS</th>
             <th rowspan="2">Uang Muka</th>      
@@ -92,9 +92,9 @@ header("Expires: 0");
         <td>" . $value->tanggal_pengerjaan . "</td>
         <td>" . $value->pembayaran_sisa . "</td>
         <td>" . $value->tanggal_pengambilan . "</td>";
-    if ($value->jenis_lensa == "KRIPTOK" && $value->bpjs == 165000) {
-        echo "<td>" . $value->bpjs . "</td>"; // tambahkan kolom paket_kriptok
-        $totalKriptok += $value->bpjs; // tambahkan jumlah transaksi kriptok ke totalKriptok
+        if ($value->jenis_lensa == "KRIPTOK" && $value->jumlah <= 265000) {
+        echo "<td>" . $value->jumlah . "</td>"; // tambahkan kolom paket_kriptok
+        $totalKriptok += $value->jumlah; // tambahkan jumlah transaksi kriptok ke totalKriptok
     } else {
         echo "<td></td>"; // jika tidak memenuhi kondisi, tambahkan sel kosong
     }

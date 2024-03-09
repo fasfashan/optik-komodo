@@ -254,15 +254,15 @@
 
 
         function save() {
-    var url, method;
-    var save_label = $('#save_label').val();
-    if (save_label == 'add') {
-        url = "<?=base_url('admin/pendaftaran/add')?>";
-        method = 'disimpan';
-    } else {
-        url = "<?=base_url('admin/pendaftaran/update')?>";
-        method = 'diupdate';
-    }
+      var url, method;
+      var save_label = $('#save_label').val();
+      if (save_label == 'add') {
+          url = "<?=base_url('admin/pendaftaran/add')?>";
+          method = 'disimpan';
+      } else {
+          url = "<?=base_url('admin/pendaftaran/update')?>";
+          method = 'diupdate';
+      }
 
     // ajax adding data to database
     $.ajax({
@@ -271,7 +271,6 @@
         data: $('#form').serialize(),
         dataType: "json",
         success: function(data) {
-          console.log(data.id)
           Swal.fire({
                 title: "Data pendaftaran telah tersimpan.",
                 // html: "ID: " + data.id + "<br/>" +
@@ -279,13 +278,17 @@
                 //       "No. BPJS: " + $('#bpjs').val() + "<br/>" +
                 //       "Alamat: " + $('#alamat').val() + "<br/>" +
                 //       "No. Telp: " + $('#telp').val(),
-                showDenyButton: true,
+            
                 confirmButtonText: "Lanjut ke Transaksi",
-                  showCancelButton: true,
-                
+                showCancelButton: true,
+                cancelButtonAriaLabel: "Lanjut ke Transaksi",
+                cancelButtonText: "Selesai",
+                cancelButtonColor: "#009300",
             }).then((result) => {
                 if (result.value) {
                     window.location.href = "<?php echo base_url().'admin/transaksi?id='?>" + data.id;
+                } else {
+                  window.location.href = "<?php echo base_url().'admin/pendaftaran'?>" 
                 }
             });
         },

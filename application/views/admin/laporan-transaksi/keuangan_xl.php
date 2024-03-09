@@ -25,7 +25,7 @@ header("Expires: 0");
 </style>
 
 
-<b><h4>Laporan Pembelian <?php echo date('M-Y');?></h4></b>
+<b><h4>Laporan Keuangan <?php echo date('M-Y');?></h4></b>
 <table width="100%">
     <thead>
         <tr style='font-weight:bold;'>
@@ -212,7 +212,7 @@ header("Expires: 0");
         <th>Total Bank</th>
         <th>Total Ibu</th>
         <th>Pengeluaran Bulanan</th>
-        <th>Pengeluaran Paket BPJS Kelas 3</th>
+        <th>Paket Kriptok</th>
         <th>Total Akhir</th>
     </tr>
     <tr>
@@ -240,28 +240,26 @@ echo  $total_bpjs;
         <td><?php echo $total_jumT5 ?></td>
         <td><?php echo $total_semua_pengeluaran ?></td>
         
-        <td><?php 
+        <td>
+            <?php 
         $this->db->select('*');
         $this->db->join('stock_lensa', 'transaksi.lensa = stock_lensa.id');
         $this->db->where('stock_lensa.jenis_lensa', 'KRIPTOK');
         $this->db->from('transaksi');
-        $this->db->where('bpjs', 165000);
+        $query = $this->db->get();
+        $transaksi = $query->result();
+        $total_bpjs_3 = 0;
 
-$query = $this->db->get();
-$transaksi = $query->result();
-
-$total_bpjs_3 = 0;
-
-foreach ($transaksi as $value) {
-    // Periksa apakah nilai bpjs sama dengan 165000 sebelum menambahkannya ke total
-    if ($value->bpjs == 165000) {
-        // Tambahkan nilai bpjs ke total_bpjs
-        $total_bpjs_3 += $value->bpjs;
-    }
-}
+        foreach ($transaksi as $value) {
+            // Periksa apakah nilai bpjs sama dengan 165000 sebelum menambahkannya ke total
+            if ($value->jumlah <= 265000) {
+                // Tambahkan nilai bpjs ke total_bpjs
+                $total_bpjs_3 += $value->jumlah;
+            }
+        }
 
 // Tampilkan total_bpjs
-echo  $total_bpjs_3;
+        echo  $total_bpjs_3;
 
         
         ?></td>

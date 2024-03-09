@@ -294,11 +294,11 @@ $transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
               <div class="col-md-8 box-card mt-5 mb-4 offset-md-4">
                 <div class="mb-3">
                   <label for="jumlah" class="form-label">Jumlah</label>
-                  <input type="text" class="form-control" id="jumlah" name="" />
+                  <input   type="text" class="form-control" id="jumlah" name="" />
                 </div>
                 <div class="mb-3">
                   <label for="bpjs" class="form-label">BPJS</label>
-                  <select id="bpjsHitung" class="form-select" nama="bpjs">
+                  <select id="bpjsHitung" class="form-select" name="bpjs">
                     <option value="330000" selected>Kelas 1 - Rp. 330.000</option>
                     <option value="220000">Kelas 2 - Rp. 220.000</option>
                     <option value="165000">Kelas 3 - Rp. 165.000</option>
@@ -306,7 +306,7 @@ $transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
                   </select>
                 </div>
                 <label for="uangMuka" class="form-label">Uang muka</label>
-                <input type="text" class="form-control" id="uangMuka" name="uang_muka" value="0" />
+                <input  type="text" class="form-control" id="uangMuka" name="uang_muka" value="0" />
                 <div class="form-floating mt-3 mb-3">
                   <select
                     class="form-select"
@@ -329,6 +329,7 @@ $transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
                 <div class="">
                   <label for="sisa" class="form-label">Sisa</label>
                   <input
+                   
                     readonly
                     placeholder="170.000"
                     type="text"
@@ -365,6 +366,7 @@ $transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
       integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
       crossorigin="anonymous"
     ></script>
+    
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script
       src="<?php echo base_url().'assets/js/custom.js'?>"></script>
@@ -424,5 +426,27 @@ $(document).ready(function() {
 <script>
   
 </script>
+<script>
+    function formatCurrency(input) {
+    // Menghapus karakter selain digit
+    let value = input.value.replace(/\D/g, '');
+
+    // Mengonversi nilai menjadi float
+    let floatValue = parseFloat(value);
+
+    // Memeriksa apakah nilai adalah angka valid
+    if (!isNaN(floatValue)) {
+      // Mengonversi nilai menjadi format mata uang dengan dua desimal
+      let formattedValue = floatValue.toLocaleString('id-ID');
+
+      // Mengembalikan nilai yang telah diformat ke input
+      input.value = formattedValue;
+    } else {
+      // Jika nilai tidak valid, kosongkan input
+      input.value = '';
+    }
+  }
+</script>
+
   </body>
 </html>
