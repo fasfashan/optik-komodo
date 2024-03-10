@@ -18,25 +18,13 @@ function searchId(id) {
   });
 }
 
-$("#jumlah, #bpjsHitung, #uangMuka").keyup(function () {
-  jumlah = $("#jumlah").val();
-  bpjs = $("#bpjsHitung").val();
-  uangmuka = $("#uangMuka").val();
-
-  sisa = parseInt(jumlah) - parseInt(bpjs) - parseInt(uangmuka);
-  $("#sisa").val(sisa);
-});
-
-$("#bpjsHitung").change(function () {
-  jumlah = $("#jumlah").val();
-  bpjs = $("#bpjsHitung").val();
-  uangmuka = $("#uangMuka").val();
-
-  sisa = parseInt(jumlah) - parseInt(bpjs) - parseInt(uangmuka);
-  $("#sisa").val(sisa);
-});
-
 function selesai() {
+  var jumlah = $("#jumlah").val().replace(/\D/g, "");
+  var bpjs = $("#bpjsHitung").val();
+  var uangmuka = $("#uangMuka").val().replace(/\D/g, "");
+
+  // Menghitung nilai sisa sesuai dengan rumus jumlah - bpjs - uang muka
+  var sisa = parseInt(jumlah) - parseInt(bpjs) - parseInt(uangmuka);
   penggunaId = $('[name="pengguna_id"]').val();
   paket = $('[name="paket"]').val();
   nota = $('[name="nota"]').val();
@@ -54,17 +42,11 @@ function selesai() {
   os_x = $('[name="os_x"]').val();
   os_v = $('[name="os_v"]').val();
   os_p = $('[name="os_p"]').val();
-
   od = od_s + " " + od_c + " " + od_x + " " + od_v;
   os = os_s + " " + os_c + " " + os_x + " " + os_v;
   pd = od_p + "/" + os_p;
   status_od = $('[name="status_od"]').val();
   status_os = $('[name="status_os"]').val();
-
-  jumlah = $("#jumlah").val();
-  bpjs = $("#bpjsHitung").val();
-  uangmuka = $("#uangMuka").val();
-  sisa = $("#sisa").val();
   pembayaran = $("#pembayaran").val();
   var formData = {
     pengguna_id: penggunaId,

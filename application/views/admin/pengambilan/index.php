@@ -111,10 +111,7 @@
 },
                 {"data": "jenis_lensa","autowidth": true},	
                 {"data": "tanggal","autowidth": true},      
-                {"data": 
-                  "sisa",
-                  "autowidth": true
-                },
+                 {"data": "sisa",render: $.fn.dataTable.render.number( ',', '.', 0, ),"autowidth": true},  
                 {"data": 
                   "pembayaran_sisa",
                   "autowidth": true

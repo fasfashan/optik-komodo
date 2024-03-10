@@ -128,7 +128,7 @@
                         <td>" . $value->keterangan . "</td>
                         <td>" . $value->tanggal . "</td>
                         <td>" . $value->pembayaran_sisa . "</td>
-                        <td>" . $value->sisa . "</td>
+                        <td>" . number_format($value->sisa) . "</td>
                     </tr>";
                     
                     $total_pengambilan += $value->sisa;

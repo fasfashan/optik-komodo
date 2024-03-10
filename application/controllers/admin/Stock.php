@@ -48,9 +48,8 @@ class Stock extends CI_Controller {
         {					
             $errors = array(				
                 'nama' 	        => form_error('nama'),
-                'kode_frame'    => form_error('kode_frame'),
+                'kode_frama'    => form_error('kode_frame'),
 				'state'         => form_error('state'),
-				'tanggal_dibuat' => date('Y-m-d')
 			);
             $data = array(
                 'status' 		=> FALSE,
@@ -62,7 +61,7 @@ class Stock extends CI_Controller {
 					'nama'				=> $this->input->post('nama'),
 					'kode_frame' 		=> $this->input->post('kode_frame'),
 					'state'				=> $this->input->post('state'),
-					
+					'harga' 			=> str_replace(',', '', $this->input->post('harga')),
 				);			
 			$this->db->insert('stock_frame', $insert);
             $data['status'] = TRUE;
@@ -100,7 +99,7 @@ class Stock extends CI_Controller {
                 'nama'				=> $this->input->post('nama'),
                 'kode_frame' 		=> $this->input->post('kode_frame'),
                 'state'				=> $this->input->post('state'),
-
+                'harga' 			=> str_replace(',', '', $this->input->post('harga')),
 				);
 			$this->db->where('id', $this->input->post('id'));
 			$this->db->update('stock_frame', $update);
@@ -116,11 +115,14 @@ class Stock extends CI_Controller {
 	}
 
 
-    private function _validate()
-	{
-		$this->form_validation->set_error_delimiters('', '');
-        $this->form_validation->set_rules('nama', 'Nama', 'trim|required|min_length[2]|max_length[30]');
-        $this->form_validation->set_rules('kode_frame', 'Kode Frame', 'trim|required');
-	}
+   public function _validate()
+{
+    $this->load->library('form_validation');
+
+    $this->form_validation->set_rules('nama', 'Nama', 'trim|required');
+    $this->form_validation->set_rules('kode_frame', 'Kode Frame', 'trim|required');
+    $this->form_validation->set_rules('state', 'State', 'trim|required');
+    // Menghapus aturan validasi harga
+}
 
 }

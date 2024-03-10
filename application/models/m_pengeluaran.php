@@ -3,13 +3,22 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class m_pengeluaran extends CI_Model {
 
+public function get_all_harian() {
+    // Mendapatkan tanggal hari ini dalam format YYYY-MM-DD
+    $today = date('Y-m-d');
 
-    public function get_all_harian() {
-        $this->datatables->select('id,nama_barang,harga,status');
-        $this->datatables->from('pengeluaran_harian');
-        $this->datatables->add_column('view', '<button onclick="hapus_harian(`$1`)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus</button>','id,nama_barang,harga,status');
-        return $this->datatables->generate();
-    }
+    // Menyiapkan kueri datatables
+    $this->datatables->select('id, nama_barang, harga, status');
+    $this->datatables->from('pengeluaran_harian');
+    // Menambahkan kriteria pencarian berdasarkan tanggal hari ini
+    $this->datatables->where('tanggal', $today);
+    // Menambahkan kolom aksi (misalnya, tombol hapus)
+    $this->datatables->add_column('view', '<button onclick="hapus_harian(`$1`)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus</button>', 'id, nama_barang, harga, status');
+    
+    // Menghasilkan dan mengembalikan output datatables
+    return $this->datatables->generate();
+}
+
 
     public function get_all_bulanan()
 	{

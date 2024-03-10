@@ -294,11 +294,11 @@ $transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
               <div class="col-md-8 box-card mt-5 mb-4 offset-md-4">
                 <div class="mb-3">
                   <label for="jumlah" class="form-label">Jumlah</label>
-                  <input   type="text" class="form-control" id="jumlah" name="" />
+                  <input  type="text" class="form-control"   id="jumlah" name="" />
                 </div>
                 <div class="mb-3">
                   <label for="bpjs" class="form-label">BPJS</label>
-                  <select id="bpjsHitung" class="form-select" name="bpjs">
+                  <select  onchange="calculate()"  id="bpjsHitung" class="form-select" name="bpjs">
                     <option value="330000" selected>Kelas 1 - Rp. 330.000</option>
                     <option value="220000">Kelas 2 - Rp. 220.000</option>
                     <option value="165000">Kelas 3 - Rp. 165.000</option>
@@ -306,7 +306,7 @@ $transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
                   </select>
                 </div>
                 <label for="uangMuka" class="form-label">Uang muka</label>
-                <input  type="text" class="form-control" id="uangMuka" name="uang_muka" value="0" />
+                <input    type="text" class="form-control" id="uangMuka" name="uang_muka" value="0" />
                 <div class="form-floating mt-3 mb-3">
                   <select
                     class="form-select"
@@ -314,7 +314,7 @@ $transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
                     aria-label="Floating label select example"
                     aria-placeholder="test"
                     name="pembayaran"
-                    onchange="checkSelection()"
+                    
                   >
                     <option disabled selected>-</option>
                     <option value="BELUM UANG MUKA" >BELUM UANG MUKA</option>
@@ -327,13 +327,12 @@ $transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
                   <label for="floatingSelect">Pembayaran melalui</label>
                 </div>
                 <div class="">
-                  <label for="sisa" class="form-label">Sisa</label>
+                  <label for="sisa" class="form-label CurrencyInput">Sisa</label>
                   <input
-                   
                     readonly
                     placeholder="170.000"
                     type="text"
-                    class="form-control"
+                    class="form-control "
                     id="sisa"
                     name="sisa"
                   />
@@ -356,31 +355,23 @@ $transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
           </div>
         </div>
       </div>
-      <div class="alert alert-danger d-none" role="alert" id="error-message">
-  Error fetching data from server.
-</div>
+      
     </div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-      crossorigin="anonymous"
-    ></script>
-    
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script
-      src="<?php echo base_url().'assets/js/custom.js'?>"></script>
-      <script src="<?=base_url();?>assets/sweetalert2/sweetalert2.all.min.js"></script>
-      <!-- Styles -->
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/numeral.js/2.3.28/numeral.min.js"></script>
+<script src="<?php echo base_url().'assets/js/custom.js'?>"></script>
+<script src="<?php echo base_url().'assets/js/jquery.price_format.js'?>"></script>
+<script src="<?=base_url();?>assets/sweetalert2/sweetalert2.all.min.js"></script>
+<!-- Styles -->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
-  
-$(document).ready(function() {
+  $(document).ready(function() {
     $('#selectFrame').select2({ width: 'resolve' }).maximizeSelect2Height();
-});
-$(document).ready(function() {
     $('#selectLensa').select2({ width: 'resolve' }).maximizeSelect2Height();
-});
+  });
 </script>
 <script>
   function checkSelection() {
@@ -394,59 +385,52 @@ $(document).ready(function() {
         buttonElement.disabled = false; // Tombol diaktifkan
     }
 }
+</script>
+<script>
 
 </script>
-    <!-- <script>
-      document
-        .getElementById("button-addon2")
-        .addEventListener("click", function () {
-          document.querySelector(".d-none").classList.remove("d-none");
-        });
-      const alertPlaceholder = document.getElementById("liveAlertPlaceholder");
-      const appendAlert = (message, type) => {
-        const wrapper = document.createElement("div");
-        wrapper.innerHTML = [
-          `<div class="alert alert-${type} position-absolute bottom-0 start-0 alert-dismissible" role="alert">`,
-          `    <div>${message}</div>`,
-          '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-          "</div>",
-        ].join("");
-
-        alertPlaceholder.append(wrapper);
-      };
-
-      const alertTrigger = document.getElementById("liveAlertBtn");
-      if (alertTrigger) {
-        alertTrigger.addEventListener("click", () => {
-          appendAlert("Transaksi berhasil dilakukan!", "success");
-        });
-      }
-
-    </script> -->
 <script>
+  $(document).ready(function() {
+    $('#pembayaran').change(function() {
+        var pembayaran = $(this).val();
+        if (pembayaran !== null && pembayaran !== "") {
+            $('#liveAlertBtn').prop('disabled', false);
+        } else {
+            $('#liveAlertBtn').prop('disabled', true);
+        }
+    });
+});
+
+  // Menambahkan event listener untuk input jumlah
+ $(document).ready(function() {
+  // Menambahkan event listener untuk input jumlah, bpjs, dan uangMuka
+  $('#jumlah, #bpjsHitung, #uangMuka').on('input', function() {
+    calculate(); // Memanggil fungsi calculate setiap kali nilai input berubah
+  });
+});
+
+  function calculate() {
+  var jumlah = $('#jumlah').val().replace(/\D/g, ''); // Menghapus semua karakter non-digit
+  var formattedJumlah = formatNumber(jumlah); // Memformat jumlah dengan tanda pemisah ribuan
+  $('#jumlah').val(formattedJumlah); // Menetapkan nilai jumlah dengan tanda pemisah ribuan ke input jumlah
+
+  var bpjs = parseInt($('#bpjsHitung').val());
+  var uangMuka = $('#uangMuka').val().replace(/\D/g, ''); // Menghapus semua karakter non-digit
+  var formattedUangMuka = formatNumber(uangMuka); // Memformat uang muka dengan tanda pemisah ribuan
+  $('#uangMuka').val(formattedUangMuka); // Menetapkan nilai uang muka dengan tanda pemisah ribuan ke input uangMuka
+
+  var sisa = parseInt(jumlah) - bpjs - parseInt(uangMuka); // Menghitung nilai sisa
+  $('#sisa').val(formatNumber(sisa)); // Memformat nilai sisa dengan tanda pemisah ribuan dan menetapkannya ke input sisa
+}
+
+
+  function formatNumber(num) {
+    return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.'); // Menambahkan tanda pemisah ribuan
+  }
+
   
 </script>
-<script>
-    function formatCurrency(input) {
-    // Menghapus karakter selain digit
-    let value = input.value.replace(/\D/g, '');
 
-    // Mengonversi nilai menjadi float
-    let floatValue = parseFloat(value);
-
-    // Memeriksa apakah nilai adalah angka valid
-    if (!isNaN(floatValue)) {
-      // Mengonversi nilai menjadi format mata uang dengan dua desimal
-      let formattedValue = floatValue.toLocaleString('id-ID');
-
-      // Mengembalikan nilai yang telah diformat ke input
-      input.value = formattedValue;
-    } else {
-      // Jika nilai tidak valid, kosongkan input
-      input.value = '';
-    }
-  }
-</script>
 
   </body>
 </html>

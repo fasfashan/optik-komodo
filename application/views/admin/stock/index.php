@@ -16,14 +16,15 @@
     </div>
     <div class="container mb-5 text-center mt-5">
       <div class="row gap-5 align-items-start">
-        <a href="<?php echo base_url().'admin/stock/input_frame'?>" class="col-4 pendaftaran">
+        <a href="<?php echo base_url().'admin/stock/input_frame'?>" class="col-3 pendaftaran">
           <img class="mb-3" src="<?php echo base_url().'assets/img/frame.svg'?>" alt="" />
           <p class="text-white">Frame</p>
         </a>
-        <a href="<?php echo base_url().'admin/stock_lensa/input'?>" class="col-4 transaksi">
+        <a href="<?php echo base_url().'admin/stock_lensa/input'?>" class="col-3 transaksi">
           <img class="mb-3" src="<?php echo base_url().'assets/img/lensa.svg'?>" alt="" />
           <p class="text-white">Lensa</p>
         </a>
+        
       </div>
     </div>
     <script
