@@ -29,12 +29,19 @@ public function get_data_pengambilan() {
     $this->datatables->where('a.status_pengerjaan', true); // Menambahkan kondisi WHERE untuk memfilter data
     $this->datatables->add_column('view', '
         <select class="form-select" id="pembayaran" aria-label="Floating label select example" onchange="pembayaran(`$1`)">
-            <option disabled selected>Pilih</option>
-            <option value="LUNAS">LUNAS</option>
-            <option value="QRIS">QRIS</option>
-            <option value="EDC">EDC</option>
-            <option value="TRANSFER">TRANSFER</option>
-            <option value="CASH">CASH</option>
+            <option disabled selected>-</option>
+                  <option value="LUNAS">LUNAS</option>
+                  <option value="BPJS">BPJS</option>
+                  <option value="QRIS">QRIS</option>
+                  <option value="EDC">EDC</option>
+                  <optgroup label="TRANSFER BANK">
+                    <option value="BCA">BCA</option>
+                    <option value="BSI">BSI</option>
+                    <option value="BNI">BNI</option>
+                    <option value="MANDIRI">MANDIRI</option>
+                  </optgroup>
+                \
+                  <option value="CASH">CASH</option>
         </select>',
         'id,a.nota,c.nama as nama_frame,c.kode_frame, c.state, d.jenis_lensa, a.tanggal, a.sisa, a.status, a.pembayaran_sisa');
     return $this->datatables->generate();

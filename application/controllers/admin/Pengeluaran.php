@@ -29,10 +29,21 @@ class Pengeluaran extends CI_Controller {
 	}
 
 	public function bulanan()
-	{	
-		$data['data'] = $this->m_pengeluaran->get_all_bulanan();	
-		$this->load->view('admin/pengeluaran/bulanan',$data);
-	}
+{   
+    $bulan = date('Y-m'); // Mengambil informasi bulan dan tahun saat ini (format: YYYY-MM)
+    $data['data'] = $this->m_pengeluaran->get_all_bulanan($bulan); // Memanggil model dengan informasi bulan dan tahun
+    
+    // Set nilai input menjadi 0 jika bulan berbeda dengan bulan saat ini
+    foreach ($data['data'] as $value) {
+        $input_month_year = date('Y-m', strtotime($value->bulan));
+        if ($input_month_year != $bulan) {
+            $value->jumlah = 0;
+        }
+    }
+    
+    $this->load->view('admin/pengeluaran/bulanan', $data);
+}
+
 
     public function input_frame(){
         $this->load->view('admin/stock/input-frame');
@@ -100,6 +111,7 @@ class Pengeluaran extends CI_Controller {
 		}else{
 			$update = array(				
                 'jumlah' 			=> $this->input->post('jumlah'),
+				'bulan' => date("Y-m-d"),
 				);
 			$this->db->where('id', $this->input->post('id'));
 			$this->db->update('pengeluaran_bulanan', $update);

@@ -308,22 +308,22 @@ $transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
                 <label for="uangMuka" class="form-label">Uang muka</label>
                 <input    type="text" class="form-control" id="uangMuka" name="uang_muka" value="0" />
                 <div class="form-floating mt-3 mb-3">
-                  <select
-                    class="form-select"
-                    id="pembayaran"
-                    aria-label="Floating label select example"
-                    aria-placeholder="test"
-                    name="pembayaran"
-                    
-                  >
-                    <option disabled selected>-</option>
-                    <option value="BELUM UANG MUKA" >BELUM UANG MUKA</option>
-                    <option value="BPJS" >BPJS</option>
-                    <option value="QRIS">QRIS</option>
-                    <option value="EDC">EDC</option>
-                    <option value="TRANSFER">TRANSFER</option>
-                    <option value="CASH">CASH</option>
-                  </select>
+                  <select class="form-select" id="pembayaran" aria-label="Default select example"aria-placeholder="test" name="pembayaran">
+                  <option disabled selected>-</option>
+                  <option value="BELUM UANG MUKA">BELUM UANG MUKA</option>
+                  <option value="BPJS">BPJS</option>
+                  <option value="QRIS">QRIS</option>
+                  <option value="EDC">EDC</option>
+                  <optgroup label="TRANSFER BANK">
+                    <option value="BCA">BCA</option>
+                    <option value="BSI">BSI</option>
+                    <option value="BNI">BNI</option>
+                    <option value="MANDIRI">MANDIRI</option>
+                  </optgroup>
+                \
+                  <option value="CASH">CASH</option>
+</select>
+
                   <label for="floatingSelect">Pembayaran melalui</label>
                 </div>
                 <div class="">
@@ -373,6 +373,7 @@ $transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
     $('#selectLensa').select2({ width: 'resolve' }).maximizeSelect2Height();
   });
 </script>
+
 <script>
   function checkSelection() {
     var selectElement = document.getElementById("pembayaran");

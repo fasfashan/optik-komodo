@@ -107,8 +107,8 @@
                       var state = row.state;
                       return data + " (" + kode_frame + "/" + state + ")";
                   },
-    "autowidth": true
-},
+                    "autowidth": true
+                },
                 {"data": "jenis_lensa","autowidth": true},	
                 {"data": "tanggal","autowidth": true},      
                  {"data": "sisa",render: $.fn.dataTable.render.number( ',', '.', 0, ),"autowidth": true},  

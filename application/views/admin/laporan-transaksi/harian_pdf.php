@@ -289,12 +289,12 @@ $total_pengeluaran = 0;
  $tanggal_hari_ini = date("Y-m-d");
 
     // Lakukan query untuk pembayaran non-cash pada tahap pertama (pengerjaan)
-    $query1 = $this->db->query("SELECT SUM(uang_muka) as total_non_cash_tahap1 FROM transaksi WHERE pembayaran IN ('edc', 'transfer', 'qris') AND DATE(tanggal) = '$tanggal_hari_ini'");
+    $query1 = $this->db->query("SELECT SUM(uang_muka) as total_non_cash_tahap1 FROM transaksi WHERE pembayaran IN ('edc', 'transfer', 'qris', 'bca', 'bsi', 'bni', 'mandiri') AND DATE(tanggal) = '$tanggal_hari_ini'");
     $result1 = $query1->row();
     $total_non_cash_tahap1 = $result1->total_non_cash_tahap1;
 
     // Lakukan query untuk pembayaran non-cash pada tahap kedua (pengambilan)
-    $query2 = $this->db->query("SELECT SUM(sisa) as total_non_cash_tahap2 FROM transaksi WHERE pembayaran_sisa IN ('edc', 'transfer', 'qris') AND DATE(tanggal_pengambilan) = '$tanggal_hari_ini'");
+    $query2 = $this->db->query("SELECT SUM(sisa) as total_non_cash_tahap2 FROM transaksi WHERE pembayaran_sisa IN ('edc', 'transfer', 'qris', 'bca', 'bsi', 'bni', 'mandiri') AND DATE(tanggal_pengambilan) = '$tanggal_hari_ini'");
     $result2 = $query2->row();
     $total_non_cash_tahap2 = $result2->total_non_cash_tahap2;
 

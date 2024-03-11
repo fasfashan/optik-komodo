@@ -20,13 +20,15 @@ public function get_all_harian() {
 }
 
 
-    public function get_all_bulanan()
+       public function get_all_bulanan()
 	{
         $this->db->select('*');
 		$this->db->from('pengeluaran_bulanan');
 		$query = $this->db->get();
 		return $query->result();
 	}
+    
+
 
     public function get_by_id($id)
 	{
