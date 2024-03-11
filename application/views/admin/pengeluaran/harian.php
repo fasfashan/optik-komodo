@@ -70,11 +70,11 @@
                   <div class="mb-3">
                     <label for="kodeFrame" class="form-label">Harga</label>
                     <input
-                      type="email"
+                      type="text"
                       class="form-control"
                       id="harga"
                       name="harga"
-                      placeholder="Masukan nama harga"
+                      placeholder="Masukan  harga"
                     />
                   </div>
                   <div class="mb-3">
@@ -138,6 +138,33 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="<?=base_url();?>assets/sweetalert2/sweetalert2.all.min.js"></script>
+    <script>
+document.addEventListener("DOMContentLoaded", function() {
+  const inputHarga = document.getElementById("harga");
+  inputHarga.addEventListener("input", function() {
+    formatCurrency(inputHarga);
+  });
+});
+
+function formatCurrency(input) {
+  // Mengambil nilai input tanpa tanda titik
+  let inputValue = input.value.replace(/\./g, '');
+
+  // Format angka dengan titik sebagai pemisah ribuan
+  inputValue = new Intl.NumberFormat('id-ID').format(inputValue);
+
+  // Setel nilai input dengan format yang baru
+  input.value = inputValue;
+
+  // Hapus titik dari nilai yang sudah diformat
+ 
+}
+
+</script>
+
+    <script>
+      
+    </script>
     <script>
       $(document).ready(function () {
         $('#datatable').DataTable();
@@ -238,8 +265,7 @@
         }
 
         function save() {
-            $('#btnSave').text('saving...'); //change button text
-            $('#btnSave').attr('disabled',true); //set button disable 
+           
             var url, method;
 
             if(save_label == 'add') {
@@ -249,11 +275,12 @@
                 
             }
 
+             var hargaInput = $('#harga').val().replace(/\./g, '');
             // ajax adding data to database
             $.ajax({
                 url : url,
                 type: "POST",
-                data: $('#form').serialize(),
+                 data: $('#form').serialize() + '&harga=' + hargaInput,
                 dataType: "json",
                 success: function(data)
                 {

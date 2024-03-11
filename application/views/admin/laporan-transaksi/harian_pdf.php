@@ -94,7 +94,7 @@
             <tr align="center" style="background-color:#29cc29">
                 <td rowspan="2">No</td>
                 <td rowspan="2">Nota</td>
-                <td colspan="3">Keterangan</td>
+                <td colspan="3">Status Refraksi</td>
                 <td rowspan="2">Tanggal pembuatan</td>
                 <td rowspan="2">Status Bayar</td>
                 <td rowspan="2">Sisa</td>

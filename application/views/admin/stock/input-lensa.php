@@ -13,7 +13,7 @@
           <li class="breadcrumb-item">
             <a href="<?php echo base_url().'admin/stock'?>">Input stok</a>
           </li>
-          <li class="breadcrumb-item active" aria-current="page">Lensa</li>
+          <li class="breadcrumb-item active" aria-current="page">Frame</li>
         </ol>
       </nav>
     </div>
