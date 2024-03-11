@@ -174,7 +174,7 @@ class Pengeluaran extends CI_Controller {
 	private function _validate_bulanan()
 	{
 		$this->form_validation->set_error_delimiters('', '');
-		$this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required|numeric');
+		$this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required|greater_than_equal_to[0]');
 	}
 
 }

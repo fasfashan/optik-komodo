@@ -43,12 +43,13 @@
 
                 <td>
                   <input
-                    type="number"
+                    type="text"
                     id="jumlah<?php echo $value->id ?>"
                     name="jumlah"
-                    class="form-control"
-                    placeholder="Rp. 100.000.000"
-                    value="<?php echo $value->jumlah ?>"
+                     class="form-control <?php echo ($value->jumlah > 0) ? 'bg-body-secondary' : ''; ?>"
+    placeholder="Rp. 100.000.000"
+                    placeholder="Masukan total"
+                     value="<?php echo number_format($value->jumlah, 0, ',', '.'); ?>"
                     aria-describedby="passwordHelpInline"
                   />
                 </td>
@@ -71,6 +72,29 @@
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="<?=base_url();?>assets/sweetalert2/sweetalert2.all.min.js"></script>
     <script>
+      document.addEventListener("DOMContentLoaded", function() {
+  const inputs = document.querySelectorAll('input[type="text"]');
+  inputs.forEach(function(input) {
+    input.addEventListener("input", function() {
+      formatCurrency(input);
+    });
+  });
+});
+function formatCurrency(input) {
+  // Mengambil nilai input tanpa tanda titik
+  let inputValue = input.value.replace(/\./g, '');
+
+  // Format angka dengan titik sebagai pemisah ribuan
+  inputValue = new Intl.NumberFormat('id-ID').format(inputValue);
+
+  // Setel nilai input dengan format yang baru
+  input.value = inputValue;
+
+  // Hapus titik dari nilai yang sudah diformat
+ 
+}
+    </script>
+    <script>
       document
         .getElementById("inputState")
         .addEventListener("change", function () {
@@ -89,12 +113,13 @@
         });
 
         function simpan(id){
-          jumlah = $('#jumlah'+id).val();
+      
+          jumlah = $('#jumlah'+id).val().replace(/\./g, '');
           url = "<?=base_url('admin/pengeluaran/add_bulanan')?>";
           $.ajax({
                 url : url,
                 type: "POST",
-                data: {id: id, jumlah: jumlah},
+                data: {id: id, jumlah: jumlah, },
                 dataType: "json",
                 success: function(data)
                 {
