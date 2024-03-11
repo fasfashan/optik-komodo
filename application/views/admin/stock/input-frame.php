@@ -86,7 +86,7 @@
                     <label for="harga" class="form-label">Harga</label>
                     <input
                         name="harga"
-                      type="number"
+                      type="text"
                       class="form-control"
                       id="harga"
                       placeholder="Masukan harga Frame"
@@ -111,45 +111,7 @@
       </div>
     </div>
     <div class="container mt-5">
-      <!-- <div class="row">
-        <div class="col-md-2 mb-3">
-          <label for="inputState" class="form-label">Tampilkan</label>
-          <select id="inputState" class="form-select">
-            <option selected>10</option>
-            <option>25</option>
-            <option>50</option>
-          </select>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-4">
-          <div class="input-group mb-3">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Masukan kode frame"
-              aria-label="Masukan Nota"
-              aria-describedby="button-addon2"
-            />
-            <button class="btn btn-success" type="button" id="button-addon2">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="20"
-                height="20"
-                viewBox="0 0 20 20"
-                fill="none"
-              >
-                <path
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M8 4C5.79086 4 4 5.79086 4 8C4 10.2091 5.79086 12 8 12C10.2091 12 12 10.2091 12 8C12 5.79086 10.2091 4 8 4ZM2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8C14 9.29583 13.5892 10.4957 12.8907 11.4765L17.7071 16.2929C18.0976 16.6834 18.0976 17.3166 17.7071 17.7071C17.3166 18.0976 16.6834 18.0976 16.2929 17.7071L11.4765 12.8907C10.4957 13.5892 9.29583 14 8 14C4.68629 14 2 11.3137 2 8Z"
-                  fill="white"
-                />
-              </svg>
-            </button>
-          </div>
-        </div>
-      </div> -->
+     
       <div class="row">
         <div class="col-12">
         <table id="barang" class="table table-striped table-bordered">
@@ -219,6 +181,29 @@
         $('#datatable').DataTable();
       });
     </script>
+     <script>
+document.addEventListener("DOMContentLoaded", function() {
+  const inputHarga = document.getElementById("harga");
+  inputHarga.addEventListener("input", function() {
+    formatCurrency(inputHarga);
+  });
+});
+
+function formatCurrency(input) {
+  // Mengambil nilai input tanpa tanda titik
+  let inputValue = input.value.replace(/\./g, '');
+
+  // Format angka dengan titik sebagai pemisah ribuan
+  inputValue = new Intl.NumberFormat('id-ID').format(inputValue);
+
+  // Setel nilai input dengan format yang baru
+  input.value = inputValue;
+
+  // Hapus titik dari nilai yang sudah diformat
+ 
+}
+
+</script>
     <script>
       document
         
@@ -325,12 +310,12 @@
                 url = "<?=base_url('admin/stock/update')?>";
                 method = 'diupdate';
             }
-
+             var hargaInput = $('#harga').val().replace(/\./g, '');
             // ajax adding data to database
             $.ajax({
                 url : url,
                 type: "POST",
-                data: $('#form').serialize(),
+                data: $('#form').serialize() + '&harga=' + hargaInput,
                 dataType: "json",
                 success: function(data)
                 {

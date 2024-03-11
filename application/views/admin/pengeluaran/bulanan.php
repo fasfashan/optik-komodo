@@ -12,7 +12,7 @@
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a href="<?php echo base_url().'welcome'?>">Home</a></li>
           <li class="breadcrumb-item">
-            <a href="<?php echo base_url().'admin/stock'?>">Pengeluaran</a>
+            <a href="<?php echo base_url().'admin/pengeluaran'?>">Pengeluaran</a>
           </li>
 
           <li class="breadcrumb-item active" aria-current="page">
@@ -71,32 +71,7 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="<?=base_url();?>assets/sweetalert2/sweetalert2.all.min.js"></script>
-    <script>
-    // Fungsi untuk menetapkan nilai input menjadi 0 setiap kali bulan berganti
-    function resetInputValues() {
-        // Ambil bulan dan tahun saat ini
-        var currentDate = new Date();
-        var currentMonth = currentDate.getMonth() + 1; // Ditambah 1 karena indeks bulan dimulai dari 0
-        var currentYear = currentDate.getFullYear();
-
-        // Loop melalui setiap input
-        var inputs = document.querySelectorAll("input[name='jumlah']");
-        inputs.forEach(function(input) {
-            var id = input.id.replace("jumlah", "");
-            var inputMonth = "<?php echo date('m', strtotime($value->bulan_tahun)) ?>"; // Ambil bulan dari data PHP
-            var inputYear = "<?php echo date('Y', strtotime($value->bulan_tahun)) ?>"; // Ambil tahun dari data PHP
-            
-            // Jika bulan dan tahun dari data tidak cocok dengan bulan dan tahun saat ini, set nilai input menjadi 0
-            if (inputMonth != currentMonth || inputYear != currentYear) {
-                input.value = 0;
-            }
-        });
-    }
-
-    // Panggil fungsi reset saat halaman dimuat
-    window.onload = resetInputValues;
-</script>
-
+    
     <script>
       document.addEventListener("DOMContentLoaded", function() {
   const inputs = document.querySelectorAll('input[type="text"]');
