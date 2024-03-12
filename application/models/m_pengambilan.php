@@ -40,7 +40,7 @@ public function get_data_pengambilan() {
                     <option value="BNI">BNI</option>
                     <option value="MANDIRI">MANDIRI</option>
                   </optgroup>
-                \
+                
                   <option value="CASH">CASH</option>
         </select>',
         'id,a.nota,c.nama as nama_frame,c.kode_frame, c.state, d.jenis_lensa, a.tanggal, a.sisa, a.status, a.pembayaran_sisa');

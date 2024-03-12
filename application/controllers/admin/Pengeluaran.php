@@ -29,21 +29,10 @@ class Pengeluaran extends CI_Controller {
 	}
 
 	public function bulanan()
-{   
-    $bulan = date('Y-m'); // Mengambil informasi bulan dan tahun saat ini (format: YYYY-MM)
-    $data['data'] = $this->m_pengeluaran->get_all_bulanan($bulan); // Memanggil model dengan informasi bulan dan tahun
-    
-    // Set nilai input menjadi 0 jika bulan berbeda dengan bulan saat ini
-    foreach ($data['data'] as $value) {
-        $input_month_year = date('Y-m', strtotime($value->bulan));
-        if ($input_month_year != $bulan) {
-            $value->jumlah = 0;
-        }
-    }
-    
-    $this->load->view('admin/pengeluaran/bulanan', $data);
-}
-
+	{	
+		$data['data'] = $this->m_pengeluaran->get_all_bulanan();	
+		$this->load->view('admin/pengeluaran/bulanan',$data);
+	}
 
     public function input_frame(){
         $this->load->view('admin/stock/input-frame');
@@ -111,7 +100,6 @@ class Pengeluaran extends CI_Controller {
 		}else{
 			$update = array(				
                 'jumlah' 			=> $this->input->post('jumlah'),
-				'bulan' => date("Y-m-d"),
 				);
 			$this->db->where('id', $this->input->post('id'));
 			$this->db->update('pengeluaran_bulanan', $update);
@@ -186,7 +174,7 @@ class Pengeluaran extends CI_Controller {
 	private function _validate_bulanan()
 	{
 		$this->form_validation->set_error_delimiters('', '');
-		$this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required|greater_than_equal_to[0]');
+		$this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required|numeric');
 	}
 
 }
