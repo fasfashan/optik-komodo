@@ -256,7 +256,7 @@ $total_pengeluaran = 0;
             <tr align="center">
                 <td><?php echo $no++; ?></td>
                 <td><?php echo $barang->nama_barang; ?></td>
-                <td><?php echo $barang->harga; ?></td>
+                <td><?php echo number_format($barang->harga) ; ?></td>
                 <td><?php echo $barang->status; ?></td>
             </tr>
             <?php 
