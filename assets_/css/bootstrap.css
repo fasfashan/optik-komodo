@@ -67,6 +67,19 @@ mark {
   color: #000;
   background: #ff0;
 }
+div.dataTables_wrapper div.dataTables_paginate {
+  margin: 0;
+  white-space: nowrap;
+  text-align: right;
+  display: flex;
+  background-color: red;
+}div.dataTables_wrapper div.dataTables_paginate {
+  margin: 0;
+  white-space: nowrap;
+  text-align: right;
+  display: flex;
+  background-color: red;
+}
 small {
   font-size: 80%;
 }

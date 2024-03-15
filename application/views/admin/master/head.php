@@ -17,3 +17,26 @@
     />
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
   </head>
+  <style>
+    #barang_paginate {
+      display: flex;
+      gap: 20px;
+      justify-content: end;
+      margin-bottom: 40px;
+      align-items: center;
+    }
+    #barang_paginate span .paginate_button  {
+      cursor: pointer;
+      background-color: green;
+      padding: 4px 8px;
+      color: white;
+    }
+    #barang_next, #barang_previous {
+      color: black;
+       cursor: pointer;
+    }
+    #barang_paginate span {
+      display: flex;
+      gap: 4px;
+    }
+  </style>

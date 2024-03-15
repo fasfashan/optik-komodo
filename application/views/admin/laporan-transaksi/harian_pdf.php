@@ -163,8 +163,9 @@
             <?php
             $no = 1;
             $sisa = 0;
-
-            foreach ($transaksi as $value) {
+           $query = $this->db->query("SELECT * FROM transaksi WHERE status_pengerjaan = 1 AND DATE(tanggal_selesai_pengerjaan) = CURDATE();");
+            $pengerjaan_kacamata = $query->result();
+            foreach ($pengerjaan_kacamata as $value) {
                 $lensa = $this->db->query("SELECT * from stock_lensa where id=" . $value->lensa)->row();
                 $frame = $this->db->query("SELECT * from stock_frame where id=" . $value->frame)->row();
                 

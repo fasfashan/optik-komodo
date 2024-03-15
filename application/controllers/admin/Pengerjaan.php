@@ -47,9 +47,10 @@ class Pengerjaan extends CI_Controller {
     public function save()
 	{
 		$update = array(				
-			'status_pengerjaan'		=> 1,
-			'tanggal_pengerjaan'	=> date("Y-m-d")
-			);
+    'status_pengerjaan'         => 1,
+    'tanggal_selesai_pengerjaan'=> date("Y-m-d"),
+    'tanggal_pengerjaan'        => date("Y-m-d")
+);
 		$this->db->where('id', $this->input->post('transaksi_id'));
 		$this->db->update('transaksi', $update);
 		$data['status'] = TRUE;
