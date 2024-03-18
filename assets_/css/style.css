@@ -205,9 +205,6 @@ fieldset[disabled] .btn-primary.active {
   font-weight: 300;
   font-size: 20px;
 }
-.dataTables_wrapper .dataTables_paginate {
-  background-color: red;
-}
 
 .menu-item a i {
   font-size: 50px;

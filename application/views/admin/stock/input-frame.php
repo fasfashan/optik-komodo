@@ -90,6 +90,7 @@
                       class="form-control"
                       id="harga"
                       placeholder="Masukan harga Frame"
+                    oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                     />
                   </div>
                 </div>

@@ -113,6 +113,19 @@ class Stock extends CI_Controller {
 		$this->db->where('id',$id);
 		$this->db->delete('stock_frame');
 	}
+	public function update_status_transaksi()
+{
+    $frame = $this->input->post('frame'); // Ambil frame dari data POST
+
+    // Update status_transaksi menjadi 1 untuk frame yang terkait
+    $this->db->where('frame', $frame);
+    $this->db->update('stock_frame', array('status_transaksi' => 1));
+
+    // Response JSON untuk memberi tahu bahwa update berhasil dilakukan
+    $response = array('status' => true);
+    $this->output->set_content_type('application/json')->set_output(json_encode($response));
+}
+
 
 
    public function _validate()

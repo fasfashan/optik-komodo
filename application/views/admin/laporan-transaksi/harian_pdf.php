@@ -186,51 +186,63 @@
 
         <h2>Frame masuk dan Keluar</h2>
         <?php
-        // Array yang berisi semua jenis state yang diinginkan
-        $desired_states = array('Kelas 1', 'Kelas 2', 'Kelas 3', 'Umum');
+    // Array yang berisi semua jenis state yang diinginkan
+    $desired_states = array('Kelas 1', 'Kelas 2', 'Kelas 3', 'Umum');
 
-        // Inisialisasi array untuk menyimpan jumlah total data untuk setiap state
-        $total_frame_by_state = array();
+    // Inisialisasi array untuk menyimpan jumlah total data untuk setiap state
+    $total_frame_by_state = array();
 
-        // Menghitung jumlah total data untuk setiap state
-        foreach ($desired_states as $state) {
-            $query_state = $this->db->query("SELECT COUNT(*) AS total FROM stock_frame WHERE state = '" . $state . "'");
-            $result_state = $query_state->row();
-            $total_frame_by_state[$state] = $result_state->total;
-        }
+    // Menghitung jumlah total data untuk setiap state
+    foreach ($desired_states as $state) {
+        $query_state = $this->db->query("SELECT COUNT(*) AS total FROM stock_frame WHERE state = '" . $state . "'");
+        $result_state = $query_state->row();
+        $total_frame_by_state[$state] = $result_state->total;
+    }
 
-        // Inisialisasi array untuk menyimpan jumlah transaksi dan sisa frame untuk setiap kelas
-        $transaksi_frame = array();
-        $sisa_frame = array();
+    // Inisialisasi array untuk menyimpan jumlah transaksi dan sisa frame untuk setiap kelas
+    $transaksi_frame = array();
+    $sisa_frame = array();
 
-        // Menghitung jumlah transaksi dan sisa frame untuk setiap kelas
-        foreach ($desired_states as $state) {
-            // Mengambil jumlah transaksi untuk setiap kelas frame
-            $query_transaksi = $this->db->query("SELECT COUNT(*) AS total FROM transaksi WHERE frame IN (SELECT id FROM stock_frame WHERE state = '" . $state . "')");
-            $result_transaksi = $query_transaksi->row();
-            $transaksi_frame[$state] = $result_transaksi->total;
+    // Menghitung jumlah transaksi dan sisa frame untuk setiap kelas
+    foreach ($desired_states as $state) {
+        // Menghitung jumlah transaksi untuk kelas saat ini
+        $current_date = date('Y-m-d'); // Mengambil tanggal hari ini
+        $query_transaksi = $this->db->query("SELECT COUNT(*) AS total FROM transaksi WHERE DATE(tanggal) = '$current_date' AND frame IN (SELECT id FROM stock_frame WHERE state = '" . $state . "')");
+        $result_transaksi = $query_transaksi->row();
+        $transaksi_frame[$state] = $result_transaksi->total;
 
-            // Menghitung sisa frame untuk setiap kelas berdasarkan perbedaan antara jumlah total frame dan jumlah transaksi
-            $sisa_frame[$state] = $total_frame_by_state[$state] - $transaksi_frame[$state];
-        }
-        ?>
+        // Menghitung jumlah total stock_frame untuk setiap kelas frame
+        $query_total_frame = $this->db->query("SELECT COUNT(*) AS total FROM stock_frame WHERE state = '" . $state . "'");
+        $result_total_frame = $query_total_frame->row();
+        $total_frame_by_state[$state] = $result_total_frame->total;
 
-        <table border="1" style="border-collapse: collapse;" width="100%">
-            <tr align="center" style="background-color:#29cc29">
-                <td>Jenis</td>
-                <td>Jumlah</td>
-                <td>Transaksi</td>
-                <td>Sisa</td>
-            </tr>
-            <?php foreach ($desired_states as $state) { ?>
-            <tr align="center">
-                <td><?php echo $state; ?></td>
-                <td><?php echo $total_frame_by_state[$state]; ?></td>
-                <td><?php echo $transaksi_frame[$state]; ?></td>
-                <td><?php echo $sisa_frame[$state]; ?></td>
-            </tr>
-            <?php } ?>
-        </table>
+        // Menghitung jumlah stock_frame yang belum digunakan dalam transaksi untuk kelas saat ini
+        $unused_frame_query = $this->db->query("SELECT COUNT(*) AS total FROM stock_frame sf LEFT JOIN transaksi t ON sf.id = t.frame WHERE t.frame IS NULL AND sf.state = '" . $state . "'");
+        $result_unused_frame = $unused_frame_query->row();
+        $sisa_frame[$state] = $result_unused_frame->total;
+    }
+?>
+
+<table border="1" style="border-collapse: collapse;" width="100%">
+    <tr align="center" style="background-color:#29cc29">
+        <td>Jenis</td>
+        <td>Sisa</td>
+        <td>Transaksi</td>
+        <td>Jumlah</td>
+    </tr>
+    <?php foreach ($desired_states as $state) { ?>
+   <tr align="center">
+    <td><?php echo $state; ?></td>
+    <td><?php echo isset($sisa_frame[$state]) ? $sisa_frame[$state] : 0; ?></td>
+    <td><?php echo isset($transaksi_frame[$state]) ? $transaksi_frame[$state] : 0; ?></td>
+    <td><?php echo isset($sisa_frame[$state]) && isset($transaksi_frame[$state]) ? $sisa_frame[$state] - $transaksi_frame[$state] : 0; ?></td>
+</tr>
+
+    <?php } ?>
+</table>
+
+</table>
+
     </div>
     <div class="laporan">
 
