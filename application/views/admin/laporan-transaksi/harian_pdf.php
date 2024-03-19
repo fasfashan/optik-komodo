@@ -205,22 +205,22 @@
 
     // Menghitung jumlah transaksi dan sisa frame untuk setiap kelas
     foreach ($desired_states as $state) {
-        // Menghitung jumlah transaksi untuk kelas saat ini
-        $current_date = date('Y-m-d'); // Mengambil tanggal hari ini
-        $query_transaksi = $this->db->query("SELECT COUNT(*) AS total FROM transaksi WHERE DATE(tanggal) = '$current_date' AND frame IN (SELECT id FROM stock_frame WHERE state = '" . $state . "')");
-        $result_transaksi = $query_transaksi->row();
-        $transaksi_frame[$state] = $result_transaksi->total;
+    // Menghitung jumlah transaksi untuk kelas saat ini
+    $current_date = date('Y-m-d'); // Mengambil tanggal hari ini
+    $query_transaksi = $this->db->query("SELECT COUNT(*) AS total FROM transaksi WHERE DATE(tanggal) = '$current_date' AND frame IN (SELECT id FROM stock_frame WHERE state = '" . $state . "')");
+    $result_transaksi = $query_transaksi->row();
+    $transaksi_frame[$state] = $result_transaksi->total;
 
-        // Menghitung jumlah total stock_frame untuk setiap kelas frame
-        $query_total_frame = $this->db->query("SELECT COUNT(*) AS total FROM stock_frame WHERE state = '" . $state . "'");
-        $result_total_frame = $query_total_frame->row();
-        $total_frame_by_state[$state] = $result_total_frame->total;
+    // Menghitung jumlah total stock_frame untuk setiap kelas frame
+    $query_total_frame = $this->db->query("SELECT COUNT(*) AS total FROM stock_frame WHERE state = '" . $state . "'");
+    $result_total_frame = $query_total_frame->row();
+    $total_frame_by_state[$state] = $result_total_frame->total;
 
-        // Menghitung jumlah stock_frame yang belum digunakan dalam transaksi untuk kelas saat ini
-        $unused_frame_query = $this->db->query("SELECT COUNT(*) AS total FROM stock_frame sf LEFT JOIN transaksi t ON sf.id = t.frame WHERE t.frame IS NULL AND sf.state = '" . $state . "'");
-        $result_unused_frame = $unused_frame_query->row();
-        $sisa_frame[$state] = $result_unused_frame->total;
-    }
+    // Menghitung jumlah stock_frame yang belum digunakan dalam transaksi untuk kelas saat ini
+    $unused_frame_query = $this->db->query("SELECT COUNT(*) AS total FROM stock_frame sf WHERE sf.state = '" . $state . "' AND sf.id NOT IN (SELECT frame FROM transaksi WHERE DATE(tanggal) = '$current_date')");
+    $result_unused_frame = $unused_frame_query->row();
+    $sisa_frame[$state] = $result_unused_frame->total;
+}
 ?>
 
 <table border="1" style="border-collapse: collapse;" width="100%">
@@ -231,12 +231,13 @@
         <td>Jumlah</td>
     </tr>
     <?php foreach ($desired_states as $state) { ?>
-   <tr align="center">
+  <tr align="center">
     <td><?php echo $state; ?></td>
     <td><?php echo isset($sisa_frame[$state]) ? $sisa_frame[$state] : 0; ?></td>
     <td><?php echo isset($transaksi_frame[$state]) ? $transaksi_frame[$state] : 0; ?></td>
-    <td><?php echo isset($sisa_frame[$state]) && isset($transaksi_frame[$state]) ? $sisa_frame[$state] - $transaksi_frame[$state] : 0; ?></td>
+    <td><?php echo isset($sisa_frame[$state]) && isset($transaksi_frame[$state]) && $transaksi_frame[$state] > 0 ? $sisa_frame[$state] - $transaksi_frame[$state] : $sisa_frame[$state]; ?></td>
 </tr>
+
 
     <?php } ?>
 </table>
