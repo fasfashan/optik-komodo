@@ -243,21 +243,18 @@ $transaksi_id = isset($_GET['id']) ? $_GET['id'] : '';
                   <span class="input-group-text">Frame</span>
                     <div class="form-floating">
                       <select class="form-select" name="frame" id="selectFrame"  style="width: 100%">
-                     <?php foreach ($frame->result_array() as $value) {
-    // Lakukan pengecekan untuk nama frame "FRAME SENDIRI"
-    if ($value['nama'] === "FRAME SENDIRI") {
+                    <?php foreach ($frame->result_array() as $value) {
+    // Lakukan query untuk memeriksa apakah frame telah digunakan dalam transaksi sebelumnya
+    $query = $this->db->query("SELECT COUNT(*) as total FROM transaksi WHERE frame = " . $value['id']);
+    $result = $query->row();
+
+    // Jika nama frame adalah "FRAME SENDIRI", atau jika total transaksi untuk frame tersebut adalah 0, maka tampilkan sebagai opsi
+    if ($value['nama'] == "FRAME SENDIRI" || $result->total == 0) {
 ?>
         <option value="<?php echo $value['id'] ?>"><?php echo $value['nama'] ?> (<?php echo $value['kode_frame'] ?>/<?php echo $value['state'] ?>)</option>
 <?php
-        continue; // Lewati iterasi jika nama frame adalah "FRAME SENDIRI"
     }
-
-    // Tampilkan semua frame kecuali "FRAME SENDIRI"
-?>
-    <option value="<?php echo $value['id'] ?>"><?php echo $value['nama'] ?> (<?php echo $value['kode_frame'] ?>/<?php echo $value['state'] ?>)</option>
-<?php
 } ?>
-
 
 
                       </select>

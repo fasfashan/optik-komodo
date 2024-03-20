@@ -213,7 +213,8 @@
 }
 
 // Menghitung jumlah transaksi
-$query_used_stock_frame = $this->db->query("SELECT COUNT(DISTINCT frame) AS total FROM transaksi");
+$query_used_stock_frame = $this->db->query("SELECT COUNT(DISTINCT frame) AS total FROM transaksi 
+                    WHERE frame IN (SELECT id FROM stock_frame WHERE state = '" . $state . "' AND nama != 'FRAME SENDIRI')");
 $result_used_stock_frame = $query_used_stock_frame->row();
 $used_stock_frame = $result_used_stock_frame->total;
 
@@ -259,6 +260,7 @@ $query_transaksi = $this->db->query("
     SELECT COUNT(*) AS total
     FROM transaksi
     WHERE frame IN (SELECT id FROM stock_frame WHERE state = '$state')
+    AND frame NOT IN (SELECT id FROM stock_frame WHERE nama = 'FRAME SENDIRI')
 ");
 
 $result_transaksi = $query_transaksi->row();
@@ -268,7 +270,9 @@ $total_transaksi_count = $result_transaksi->total;
 $hasil = $total_frame_count - $total_transaksi_count;
  // Query untuk menghitung jumlah transaksi hanya pada hari ini
                     $current_date = date('Y-m-d'); // Mengambil tanggal hari ini
-                    $query_transaksi = $this->db->query("SELECT COUNT(*) AS total FROM transaksi WHERE DATE(tanggal) = '$current_date' AND frame IN (SELECT id FROM stock_frame WHERE state = '" . $state . "')");
+                    $query_transaksi = $this->db->query("SELECT COUNT(*) AS total FROM transaksi 
+                    WHERE DATE(tanggal) = '$current_date' 
+                    AND frame IN (SELECT id FROM stock_frame WHERE state = '" . $state . "' AND nama != 'FRAME SENDIRI')");
                     $result_transaksi = $query_transaksi->row();
                     echo $result_transaksi->total;
                     
@@ -281,7 +285,7 @@ $hasil = $total_frame_count - $total_transaksi_count;
                     echo $result_transaksi->total;
                 ?>
             </td>
-            <td><?php echo ($hasil + $result_transaksi->total  - $result_transaksi->total) ?></td>
+            <td><?php echo $hasil ?></td>
         </tr>
         <?php endforeach; ?>
     </tbody>

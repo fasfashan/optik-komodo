@@ -6,7 +6,6 @@
     $this->load->view('admin/master/navbar');
   ?>
 
-
     <div class="container mt-5">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
@@ -16,48 +15,110 @@
           </li>
 
           <li class="breadcrumb-item active" aria-current="page">
-            Pengeluaran bulanan
+            Pengeluaran Bulanan
           </li>
         </ol>
       </nav>
     </div>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <!-- Button trigger modal -->
+          <button
+            type="button"
+            class="btn btn-success"
+            onclick="add_frame()"
+          >
+            Tambah pengeluaran
+          </button>
 
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            id="modal_form"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">
+                    Pengeluaran
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                <form action="#" id="form">
+                 
+                  <div class="mb-3">
+                    <label for="kodeFrame" class="form-label">Jumlah</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="jumlah"
+                      name="jumlah"
+                      placeholder="Masukan jumlah"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputState" class="form-label">Jenis Pengeluaran</label>
+                    <select id="jenis_pengeluaran" name="jenis_pengeluaran" class="form-select">
+                      <option selected>Gaji Karyawan</option>
+                      <option >BPJS Kesehatan</option>
+                      <option >	
+                      BPJS Ketenagakerjaan
+                      </option>
+                      <option >Listrik</option>
+                      <option >Telepon</option>
+                      <option>Wifi</option>
+                    </select>
+                  </div>
+                  <!-- <div class="mb-3 d-none">
+                    <label for="harga" class="form-label">Harga</label>
+                    <input
+                      type="number"
+                      class="form-control"
+                      id="harga"
+                      placeholder="Masukan kode Frame"
+                    />
+                  </div>
+                </div> -->
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button id="btnSave" onclick="save()" type="button" class="btn btn-success">Simpan</button>
+                </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="container mt-5">
       <div class="row">
         <div class="col-12">
-          <table class="table table-striped">
+          <table id="pengeluaran"  class="table table-striped table-bordered">
             <thead>
               <tr>
                 <th scope="col">No.</th>
-                <th class="d-on" scope="col">Keterangan</th>
-                <th class="d-on" scope="col">Total</th>
-
-                <th scope="col">Action</th>
+                <th class="d-on" scope="col">Jenis Pengeluaran</th>
+                <th scope="col">Harga</th>
+                <th scope="col">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              <?php foreach($data as $value) { ?>
-              <tr>
-                <th scope="row"><input type="hidden" name="id" id="id" value="<?php echo $value->id ?>"><?php echo $value->id ?></th>
-                <td><?php echo $value->nama ?></td>
-
-                <td>
-                  <input
-                    type="text"
-                    id="jumlah<?php echo $value->id ?>"
-                    name="jumlah"
-                     class="form-control <?php echo ($value->jumlah > 0) ? 'bg-body-secondary' : ''; ?>"
-    placeholder="Rp. 100.000.000"
-                    placeholder="Masukan total"
-                     value="<?php echo number_format($value->jumlah, 0, ',', '.'); ?>"
-                    aria-describedby="passwordHelpInline"
-                  />
-                </td>
-                <td>
-                  <button type="submit" class="btn btn-success" onclick="simpan(<?php echo $value->id ?>)">Simpan</button>
-                </td>
-              </tr>
-              <?php } ?>
             </tbody>
           </table>
         </div>
@@ -71,16 +132,14 @@
     <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
     <script src="https://cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
     <script src="<?=base_url();?>assets/sweetalert2/sweetalert2.all.min.js"></script>
-    
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
-  const inputs = document.querySelectorAll('input[type="text"]');
-  inputs.forEach(function(input) {
-    input.addEventListener("input", function() {
-      formatCurrency(input);
-    });
+document.addEventListener("DOMContentLoaded", function() {
+  const inputHarga = document.getElementById("jumlah");
+  inputHarga.addEventListener("input", function() {
+    formatCurrency(inputHarga);
   });
 });
+
 function formatCurrency(input) {
   // Mengambil nilai input tanpa tanda titik
   let inputValue = input.value.replace(/\./g, '');
@@ -94,8 +153,84 @@ function formatCurrency(input) {
   // Hapus titik dari nilai yang sudah diformat
  
 }
+
+</script>
+
+    <script>
+      
     </script>
     <script>
+      $(document).ready(function () {
+        $('#datatable').DataTable();
+      });
+    </script>
+    <script>
+       var save_label;
+        var table;
+
+       $(document).ready(function() {
+
+        $.fn.dataTableExt.oApi.fnPagingInfo = function(oSettings)
+        {
+            return {
+                "iStart": oSettings._iDisplayStart,
+                "iEnd": oSettings.fnDisplayEnd(),
+                "iLength": oSettings._iDisplayLength,
+                "iTotal": oSettings.fnRecordsTotal(),
+                "iFilteredTotal": oSettings.fnRecordsDisplay(),
+                "iPage": Math.ceil(oSettings._iDisplayStart / oSettings._iDisplayLength),
+                "iTotalPages": Math.ceil(oSettings.fnRecordsDisplay() / oSettings._iDisplayLength)
+            };
+        };        
+
+        table = $("#pengeluaran").DataTable({
+            initComplete: function() {
+                var api = this.api();
+                $('#pengeluaran_filter input')
+                    .off('.DT')
+                    .on('keyup.DT', function(e) {
+                        api.search(this.value).draw();
+                    });
+            },
+            oLanguage: {
+                sProcessing: "loading..."
+            },
+            processing: true,
+            serverSide: true,
+            ajax: {
+                "url": "<?php echo base_url().'admin/pengeluaran/get_data_bulanan'?>",
+                "type": "POST"
+            },            
+            columns: [
+                {                    
+                    "data": "id",
+                    "orderable": false,
+                    "searchable": false,
+                },
+                {"data": "jenis_pengeluaran","autowidth": true},		
+                {"data": "jumlah",render: $.fn.dataTable.render.number( ',', '.', 0, ),"autowidth": true},      
+               
+                {
+                    "data": "view",
+                    "orderable": false,
+                    "searchable": false,
+                    "width": "13%"
+                }
+            ],
+            order: [[1, 'asc']],
+            rowId: function(a){
+                return a;
+            },
+            rowCallback: function(row, data, iDisplayIndex) {
+                var info = this.fnPagingInfo();
+                var page = info.iPage;
+                var length = info.iLength;
+                var index = page * length + (iDisplayIndex + 1);
+                $('td:eq(0)', row).html(index);
+            }
+        });
+      });
+
       document
         .getElementById("inputState")
         .addEventListener("change", function () {
@@ -113,26 +248,114 @@ function formatCurrency(input) {
           }
         });
 
-        function simpan(id){
-      
-          jumlah = $('#jumlah'+id).val().replace(/\./g, '');
-          url = "<?=base_url('admin/pengeluaran/add_bulanan')?>";
-          $.ajax({
+        function add_frame()
+        {
+            save_label = 'add';        
+            $('#form')[0].reset(); // reset form on modals
+            $('.form-group').removeClass('has-error'); // clear error class
+            $('.help-block').empty(); // clear error string
+            $('#modal_form').modal('show'); // show bootstrap modal
+            $('.modal-title').text('Tambah Pengeluaran Bulanan'); // Set Title to Bootstrap modal title
+        }
+
+        function save() {
+           
+            var url, method;
+
+            if(save_label == 'add') {
+                url = "<?=base_url('admin/pengeluaran/add_bulanan')?>";
+                method = 'disimpan';
+            } else {
+                
+            }
+
+             var hargaInput = $('#jumlah').val().replace(/\./g, '');
+            // ajax adding data to database
+            $.ajax({
                 url : url,
                 type: "POST",
-                data: {id: id, jumlah: jumlah, },
+                 data: $('#form').serialize() + '&jumlah=' + hargaInput,
                 dataType: "json",
                 success: function(data)
                 {
-                    window.location.reload();
-                   
+                    // console.log(data);
+                    if(data.status) //if success close modal and reload ajax table
+                    {
+                        $('#modal_form').modal('hide');
+                        reload_ajax();
+                        swalert(method);
+                    }
+                    else
+                    {
+                        $.each(data.errors, function(key, value){
+                            $('[name="'+key+'"]').addClass('is-invalid'); //select parent twice to select div form-group class and add has-error class
+                            $('[name="'+key+'"]').next().text(value); //select span help-block class set text error string
+                            if(value == ""){
+                                $('[name="'+key+'"]').removeClass('is-invalid');
+                                $('[name="'+key+'"]').addClass('is-valid');
+                            }
+                        });
+                    }
+                    $('#btnSave').text('save'); //change button text
+                    $('#btnSave').attr('disabled',false); //set button enable 
                 },
                 error: function (jqXHR, textStatus, errorThrown)
                 {
                     alert('Error adding / update data');
+                    $('#btnSave').text('save'); //change button text
+                    $('#btnSave').attr('disabled',false); //set button enable 
                 }
             });
         }
+
+        function reload_ajax(){
+            table.ajax.reload(null, false);
+        }
+
+        function addCommas(nStr) {
+            var val = nStr;
+            if (val == null || val == "") {
+                console.log("cekk");
+                return 0;
+            }
+            val = val.replace(/[^0-9\.]/g,'');
+            if(val != "") {
+                valArr = val.split('.');
+                valArr[0] = (parseInt(valArr[0],10)).toLocaleString();
+                val = valArr.join('.');
+            }
+            return val;
+        }
+
+    function hapus_harian(id)
+    {
+        Swal({
+            title: 'Anda yakin?',
+            text: "Data pengeluaran harian akan dihapus!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Hapus data!'
+        }).then((result) => {
+            if(result.value) {
+                $.ajax({
+                    url : "<?=base_url('admin/pengeluaran/delete_bulanan/')?>/"+id,
+                    type: "POST",
+                    success: function(data)
+                    {
+                        reload_ajax();
+                        swalert('dihapus');
+                    },
+                    error: function (jqXHR, textStatus, errorThrown)
+                    {
+                        alert('Error deleting data');
+                    }
+                });
+            }
+        });
+    }
+       
     </script>
   </body>
 </html>

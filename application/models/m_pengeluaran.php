@@ -20,13 +20,26 @@ public function get_all_harian() {
 }
 
 
-       public function get_all_bulanan()
-	{
-        $this->db->select('*');
-		$this->db->from('pengeluaran_bulanan');
-		$query = $this->db->get();
-		return $query->result();
-	}
+      public function get_all_bulanan()
+{
+    // Mendapatkan tanggal awal bulan ini
+    $first_day_of_month = date('Y-m-01');
+    
+    // Mendapatkan tanggal terakhir bulan ini
+    $last_day_of_month = date('Y-m-t');
+
+    // Menyiapkan kueri datatables
+    $this->datatables->select('id, jenis_pengeluaran, jumlah');
+    $this->datatables->from('pengeluaran_bulanan');
+    // Menambahkan kriteria pencarian berdasarkan bulan ini
+    $this->datatables->where("tanggal BETWEEN '$first_day_of_month' AND '$last_day_of_month'");
+    // Menambahkan kolom aksi (misalnya, tombol hapus)
+    $this->datatables->add_column('view', '<button onclick="hapus_harian(`$1`)" type="button" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Hapus</button>', 'id, nama_barang, harga, status');
+    
+    // Menghasilkan dan mengembalikan output datatables
+    return $this->datatables->generate();
+}
+
     
 
 

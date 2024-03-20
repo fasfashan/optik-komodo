@@ -1,6 +1,8 @@
 <?php 
 
-$title = "lap_beli_range_date".$tgl_mulai.' - '.$tgl_akhir;
+$tanggal1 = date('M-Y', strtotime($tgl_mulai));
+$tanggal2 = date('M-Y', strtotime($tgl_akhir));
+$title = "Report Bulanan Database $tanggal1 ";
 
 header("Content-type: application/octet-stream");
 

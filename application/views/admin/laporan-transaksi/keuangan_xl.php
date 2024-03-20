@@ -1,6 +1,8 @@
 <?php 
+$tanggal1 = date('M-Y', strtotime($tgl_mulai));
+$tanggal2 = date('M-Y', strtotime($tgl_akhir));
+$title = "Laporan Keuangan $tanggal1 ";
 
-$title = "lap_beli_range_date".date('d-m-Y');;
 
 header("Content-type: application/octet-stream");
 
@@ -172,12 +174,20 @@ header("Expires: 0");
         <tr>
             <th rowspan="2">Pengeluaran Bulanan</th>
             <?php
+            $tanggal1 = date('Y-m-d',strtotime($tgl_mulai));
+        $tanggal2 = date('Y-m-d',strtotime($tgl_akhir));
             // Lakukan query untuk mengambil data pengeluaran harian
-             $query_pengeluaran = $this->db->get('pengeluaran_bulanan');
+          $query_pengeluaran = $this->db->where('tanggal >=', $tanggal1)
+                              ->where('tanggal <=', $tanggal2)
+                              ->get('pengeluaran_bulanan');
+
+echo $this->db->last_query();
+
+
             $pengeluaran_bulanan = $query_pengeluaran->result();
             ?>
             <?php foreach ($pengeluaran_bulanan as $item): ?>
-                <th><?php echo $item->nama; ?></th>
+                <th><?php echo $item->jenis_pengeluaran; ?></th>
             <?php endforeach; ?>
             <th>Jumlah</th>
         </tr>
@@ -189,7 +199,7 @@ header("Expires: 0");
             ?>
             <td><?php echo $item->jumlah; ?></td>
             <?php endforeach; ?>
-            <td><?php echo number_format($total_semua_pengeluaran); ?></td> <!-- Total -->
+            <td><?php echo $total_semua_pengeluaran; ?></td> <!-- Total -->
         </tr>
     </thead>
 </table>

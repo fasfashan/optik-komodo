@@ -11,6 +11,7 @@
       crossorigin="anonymous"
     />
     <link href="<?php echo base_url().'assets/style.css'?>" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="<?php echo base_url().'assets/img/favicon.ico'?>">
     <link
       rel="stylesheet"
       href="https://cdn.datatables.net/1.11.3/css/dataTables.bootstrap5.min.css"

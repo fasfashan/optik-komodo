@@ -30,8 +30,7 @@ class Pengeluaran extends CI_Controller {
 
 	public function bulanan()
 	{	
-		$data['data'] = $this->m_pengeluaran->get_all_bulanan();	
-		$this->load->view('admin/pengeluaran/bulanan',$data);
+		$this->load->view('admin/pengeluaran/bulanan');
 	}
 
     public function input_frame(){
@@ -42,6 +41,12 @@ class Pengeluaran extends CI_Controller {
 		// print_r("ss");
 		header('Content-Type: application/json');
 		echo $this->m_pengeluaran->get_all_harian();
+        // die();
+	}
+	function get_data_bulanan(){ //data data produk by JSON object
+		// print_r("ss");
+		header('Content-Type: application/json');
+		echo $this->m_pengeluaran->get_all_bulanan();
         // die();
 	}
 
@@ -82,28 +87,35 @@ class Pengeluaran extends CI_Controller {
 
 	public function add_bulanan()
 	{
-		$this->validation_for = 'update';
-		$data = array();
+		$this->validation_for = 'add';
+        $data = array();
 		$data['status'] = TRUE;
 
-		$this->_validate_bulanan();
+		$cek = $this->input->post('nama');
 
-        if ($this->form_validation->run() == FALSE){
-			$errors = array(
-                'jumlah' 	        => form_error('jumlah'),
-            );
+		$this->_validate_bulanan();
+		// print
+
+        if ($this->form_validation->run() == FALSE)
+        {					
+            $errors = array(				
+                'jenis_pengeluaran' 	=> form_error('jenis_pengeluaran'),
+                'jumlah'    		=> form_error('jumlah'),
+			);
             $data = array(
                 'status' 		=> FALSE,
 				'errors' 		=> $errors
-            );
+            );			
             $this->output->set_content_type('application/json')->set_output(json_encode($data));
-		}else{
-			$update = array(				
-                'jumlah' 			=> $this->input->post('jumlah'),
-				);
-			$this->db->where('id', $this->input->post('id'));
-			$this->db->update('pengeluaran_bulanan', $update);
-			$data['status'] = TRUE;
+        }else{			
+            $insert = array(
+				'jenis_pengeluaran'				=> $this->input->post('jenis_pengeluaran'),
+				'jumlah' 			=> str_replace(',', '', $this->input->post('jumlah')),
+					'tanggal' => date("Y-m-d"),
+					
+				);			
+			$this->db->insert('pengeluaran_bulanan', $insert);
+            $data['status'] = TRUE;
             $this->output->set_content_type('application/json')->set_output(json_encode($data));
 		}
 	}
@@ -113,6 +125,11 @@ class Pengeluaran extends CI_Controller {
 	{
 		$this->db->where('id',$id);
 		$this->db->delete('pengeluaran_harian');
+	}
+	public function delete_bulanan($id)
+	{
+		$this->db->where('id',$id);
+		$this->db->delete('pengeluaran_bulanan');
 	}
 
 
@@ -129,7 +146,7 @@ class Pengeluaran extends CI_Controller {
 		$data = array();
 		$data['status'] = TRUE;
 
-		$this->_validate();
+		
 
         if ($this->form_validation->run() == FALSE){
 			$errors = array(
@@ -174,6 +191,7 @@ class Pengeluaran extends CI_Controller {
 	private function _validate_bulanan()
 	{
 		$this->form_validation->set_error_delimiters('', '');
+		 $this->form_validation->set_rules('jenis_pengeluaran', 'Jenis Pengeluaran', 'trim|required|min_length[2]|max_length[30]');
 		$this->form_validation->set_rules('jumlah', 'Jumlah', 'trim|required|numeric');
 	}
 
