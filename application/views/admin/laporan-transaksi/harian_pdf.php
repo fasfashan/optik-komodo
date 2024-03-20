@@ -7,6 +7,7 @@
     <style>
         body {
             font-family: sans-serif;
+            text-transform: uppercase;
         }
         th, td {
         padding: 10px;
@@ -26,6 +27,9 @@
         padding: 24px;
         border: 1px solid black;
         width: 300px;
+    }
+    table {
+        border-color: red;
     }
 </style>
 
@@ -184,66 +188,107 @@
     </div>
     <div class="laporan">
 
-        <h2>Frame masuk dan Keluar</h2>
-        <?php
-    // Array yang berisi semua jenis state yang diinginkan
-    $desired_states = array('Kelas 1', 'Kelas 2', 'Kelas 3', 'Umum');
-
+        <h2>FRAME MASUK DAN KELUAR <?php
+          $current_date = date('d-m-y');  
+          echo $current_date;  ?></h2>
+       
+<div class="laporan">
+<?php
+ $desired_states = array('Kelas 1', 'Kelas 2', 'Kelas 3', 'Umum');
     // Inisialisasi array untuk menyimpan jumlah total data untuk setiap state
-    $total_frame_by_state = array();
+    $total_stock_frame = array();
 
-    // Menghitung jumlah total data untuk setiap state
+    // Menghitung total stock frame untuk setiap state
     foreach ($desired_states as $state) {
-        $query_state = $this->db->query("SELECT COUNT(*) AS total FROM stock_frame WHERE state = '" . $state . "'");
-        $result_state = $query_state->row();
-        $total_frame_by_state[$state] = $result_state->total;
-    }
+    // Menghitung total stock frame untuk state saat ini
+   $query_total_stock_frame = $this->db->query("
+    SELECT COUNT(*) AS total
+    FROM stock_frame
+    WHERE state = '$state'
+    AND nama != 'FRAME SENDIRI'
+");
 
-    // Inisialisasi array untuk menyimpan jumlah transaksi dan sisa frame untuk setiap kelas
-    $transaksi_frame = array();
-    $sisa_frame = array();
+    $result_total_stock_frame = $query_total_stock_frame->row();
+    $total_stock_frame[$state] = $result_total_stock_frame->total;
+}
 
-    // Menghitung jumlah transaksi dan sisa frame untuk setiap kelas
-    foreach ($desired_states as $state) {
-    // Menghitung jumlah transaksi untuk kelas saat ini
-    $current_date = date('Y-m-d'); // Mengambil tanggal hari ini
-    $query_transaksi = $this->db->query("SELECT COUNT(*) AS total FROM transaksi WHERE DATE(tanggal) = '$current_date' AND frame IN (SELECT id FROM stock_frame WHERE state = '" . $state . "')");
-    $result_transaksi = $query_transaksi->row();
-    $transaksi_frame[$state] = $result_transaksi->total;
+// Menghitung jumlah transaksi
+$query_used_stock_frame = $this->db->query("SELECT COUNT(DISTINCT frame) AS total FROM transaksi");
+$result_used_stock_frame = $query_used_stock_frame->row();
+$used_stock_frame = $result_used_stock_frame->total;
 
-    // Menghitung jumlah total stock_frame untuk setiap kelas frame
-    $query_total_frame = $this->db->query("SELECT COUNT(*) AS total FROM stock_frame WHERE state = '" . $state . "'");
-    $result_total_frame = $query_total_frame->row();
-    $total_frame_by_state[$state] = $result_total_frame->total;
+// Menghitung sisa stock frame untuk setiap state
+$remaining_stock_frame = array();
+foreach ($total_stock_frame as $state => $total) {
+    // Menghitung sisa stock frame untuk state saat ini
+    $query_remaining_stock_frame = $this->db->query("
+    SELECT COUNT(*) AS total
+    FROM stock_frame sf
+    LEFT JOIN transaksi t ON sf.id = t.frame
+    WHERE sf.state = '$state' AND t.frame IS NULL
+    AND sf.nama != 'FRAME SENDIRI'
+");
 
-    // Menghitung jumlah stock_frame yang belum digunakan dalam transaksi untuk kelas saat ini
-    $unused_frame_query = $this->db->query("SELECT COUNT(*) AS total FROM stock_frame sf WHERE sf.state = '" . $state . "' AND sf.id NOT IN (SELECT frame FROM transaksi WHERE DATE(tanggal) = '$current_date')");
-    $result_unused_frame = $unused_frame_query->row();
-    $sisa_frame[$state] = $result_unused_frame->total;
+    $result_remaining_stock_frame = $query_remaining_stock_frame->row();
+    $remaining_stock_frame[$state] = $result_remaining_stock_frame->total;
 }
 ?>
-
 <table border="1" style="border-collapse: collapse;" width="100%">
-    <tr align="center" style="background-color:#29cc29">
-        <td>Jenis</td>
-        <td>Sisa</td>
-        <td>Transaksi</td>
-        <td>Jumlah</td>
-    </tr>
-    <?php foreach ($desired_states as $state) { ?>
-  <tr align="center">
-    <td><?php echo $state; ?></td>
-    <td><?php echo isset($sisa_frame[$state]) ? $sisa_frame[$state] : 0; ?></td>
-    <td><?php echo isset($transaksi_frame[$state]) ? $transaksi_frame[$state] : 0; ?></td>
-    <td><?php echo isset($sisa_frame[$state]) && isset($transaksi_frame[$state]) && $transaksi_frame[$state] > 0 ? $sisa_frame[$state] - $transaksi_frame[$state] : $sisa_frame[$state]; ?></td>
-</tr>
+    <thead>
+        <tr align="center" style="background-color:#29cc29">
+            <td>Jenis</td>
+            <td>Sisa</td>
+            <td>Transaksi</td>
+            <td>Jumlah</td>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($desired_states as $state): ?>
+            <?php
+// Query untuk menghitung jumlah total stock frame untuk state tertentu
+$query_total_frame = $this->db->query("
+    SELECT COUNT(*) AS total
+    FROM stock_frame
+    WHERE state = '$state'
+    AND nama != 'FRAME SENDIRI'
+");
+$result_total_frame = $query_total_frame->row();
+$total_frame_count = $result_total_frame->total;
 
+$query_transaksi = $this->db->query("
+    SELECT COUNT(*) AS total
+    FROM transaksi
+    WHERE frame IN (SELECT id FROM stock_frame WHERE state = '$state')
+");
 
-    <?php } ?>
+$result_transaksi = $query_transaksi->row();
+$total_transaksi_count = $result_transaksi->total;
+
+// Menghitung sisa total frame yang belum memiliki transaksi pada hari ini
+$hasil = $total_frame_count - $total_transaksi_count;
+ // Query untuk menghitung jumlah transaksi hanya pada hari ini
+                    $current_date = date('Y-m-d'); // Mengambil tanggal hari ini
+                    $query_transaksi = $this->db->query("SELECT COUNT(*) AS total FROM transaksi WHERE DATE(tanggal) = '$current_date' AND frame IN (SELECT id FROM stock_frame WHERE state = '" . $state . "')");
+                    $result_transaksi = $query_transaksi->row();
+                    echo $result_transaksi->total;
+                    
+?>
+        <tr>
+            <td><?php echo $state; ?></td>
+            <td><?php echo ($hasil + $result_transaksi->total) ?></td>
+            <td>
+                <?php
+                    echo $result_transaksi->total;
+                ?>
+            </td>
+            <td><?php echo ($hasil + $result_transaksi->total  - $result_transaksi->total) ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </tbody>
+   
 </table>
 
-</table>
-
+</div>
     </div>
     <div class="laporan">
 
